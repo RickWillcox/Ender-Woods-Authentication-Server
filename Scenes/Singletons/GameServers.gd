@@ -39,3 +39,5 @@ func DistributeLoginToken(token, gameserver):
 	var gameserver_peer_id = gameserverlist[gameserver]
 	rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
 
+func CreateSessionToken(username):
+	rpc_id(1, "CreateSessionToken", username)

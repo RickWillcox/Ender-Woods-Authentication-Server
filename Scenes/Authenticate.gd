@@ -58,7 +58,6 @@ remote func AuthenticatePlayer(username, password, player_id):
 			var timestamp = str(OS.get_unix_time())
 			token = hashed + timestamp
 			var gameserver = "GameServer1"
-			print(gameserver)
 			GameServers.DistributeLoginToken(token, gameserver)
 		
 		
