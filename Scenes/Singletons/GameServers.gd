@@ -39,3 +39,6 @@ func DistributeLoginToken(token, gameserver):
 	var gameserver_peer_id = gameserverlist[gameserver]
 	rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
 
+remote func ReceivePlayerSessionToken(session_token, player_id):
+	print("Player ID: ", session_token)
+	print("Session Token: ", session_token)
