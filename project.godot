@@ -19,6 +19,11 @@ config/windows_native_icon="res://assets/a.ico"
 
 PlayerData="*res://PlayerData.gd"
 GameServers="*res://Scenes/Singletons/GameServers.gd"
+Inventory="*res://Inventory.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg" )
 
 [physics]
 
