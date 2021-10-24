@@ -8,6 +8,8 @@ var auth_hashed_password
 var salt
 
 func _ready():
+	Inventory.prepare(PlayerData.db_path)
+	Inventory.init()
 	StartServer()
 		
 func StartServer():
