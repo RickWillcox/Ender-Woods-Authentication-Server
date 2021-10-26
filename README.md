@@ -22,7 +22,7 @@
 You must run the Authentication Server Project using 3.3.4MariaDB.exe
 
 1. Clone this repo
-2. Open 3.3.4MariaDB.exe
+2. Open 3.3.4MariaDB.exe (found in this repo)
 3. Open the Godot project file for Authenticaion Server (project.godot) from this exe.
 
 You will now be able to run the Authentication Server like normal (play), and then load up Gateway Server > World Server > Client and test the game.
