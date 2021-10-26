@@ -48,7 +48,7 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 	print("Player ID: ", player_id)
 	print("Session Token: ", token)
 	print("-----------------------")
-	PlayerData.dbAddPlayerID(player_id, token)
+	PlayerData.dbAddSessionToken(player_id, token)
 
 remote func TestAuthUsingPlayerID(player_id, test_data):
 	print("Player ID: ", player_id)

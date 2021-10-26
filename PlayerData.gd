@@ -1,17 +1,10 @@
 extends Node
 
-#const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns")
-##var db
-#var db_path = "user://PlayerLoginData.db"
 var PlayerIDs
 
 #### Maria DB
 var db: MariaDB
 var res 
-
-func _ready():
-#	dbRefreshDatabase()	
-	pass
 
 func dbConnect():
 	db = MariaDB.new()
@@ -31,48 +24,51 @@ func dbCreateAccount(username, password, salt):
 
 func dbDeleteAccount(username, password, salt):
 	print("Attempting to delete account")
-	res = db.query("DELETE FROM playeraccounts WHERE username = '" + str(username) + "';")
+	res = db.query("DELETE FROM playeraccounts WHERE username = '%s';" % [username])
 	dbReportError(res)
 	return res
 
-func dbCheckUniqueUsername(username):
-	var res
-	for i in range (0, PlayerIDs.size()):
-		if PlayerIDs[i]["username"] == username:
-			return [true, username, PlayerIDs[i]["password"], PlayerIDs[i]["salt"]]
-		else:
-			res = [false, null, null, null]
-	return res
-
 func dbRefreshPlayerIDs():
-	print("Refreshing PlayerIDs")
 	PlayerIDs = db.query("SELECT * FROM playeraccounts;")
 	dbReportError(res)
 
 func dbAddAuthToken(username, auth_token):
-	print("Print Adding Auth token")
-	res = db.query("UPDATE playeraccounts SET auth_token = '%s' where username = '%s'" % [auth_token, username])
+	res = db.query("UPDATE playeraccounts SET auth_token = '%s' where username = '%s';" % [auth_token, username])
 	dbReportError(res)
 
 #player_ID becomes session_token here
 func dbAddSessionToken(player_id, auth_token):
-	print("Adding Session Token")
-	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s'" % [player_id, auth_token])
+	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s';" % [player_id, auth_token])
 	dbReportError(res)
-	
-#func dbReadItem(player_id):
-#	db = SQLite.new()
-#	db.path = db_path
-#	db.open_db()
-#	db.query("select ID from PlayerLoginData where session_token = '" + str(player_id) + "'")
-#	var result = db.query_result[0]["ID"]
-#	print(result)
-#	db.query("Select * from Inventory where player_id = '" + str(result) + "'")
-#	var inven = db.query_result
-#	print(inven)
+
+func dbCheckUniqueUsername(username):
+	var res
+	for id in PlayerIDs:
+		if id["username"] == username:
+			res = [true, id["username"], id["password"], id["salt"]]
+			break
+		else:
+			res = [false, null, null, null]
+	return res	
 
 func dbReportError(err):
 	if err != OK:
-		print("Failed to insert data into hello_world! Error: %d", err)
+		print("Error: ", err)
 		return
+
+###Functions only used for Testing
+	
+func dbCheckAuthTokenExists(auth_token):
+	for id in PlayerIDs:
+		if id["auth_token"] == auth_token:
+			return true
+	return false
+
+func dbCheckSessionTokenExists(session_token):
+	for id in PlayerIDs:
+		if id["session_token"] == str(session_token):
+			return true
+	return false
+
+
 
