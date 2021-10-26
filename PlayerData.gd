@@ -1,41 +1,72 @@
 extends Node
 
-const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns")
-var db
-var db_path = "user://PlayerLoginData.db"
 var PlayerIDs
 
-func _ready():
-	dbRefreshDatabase()	
+#### Maria DB
+var db: MariaDB
+var res 
 
-func dbNewPlayer(username, password, salt):
-	db = SQLite.new()
-	db.path = db_path
-	db.open_db()
-	var table_name = "PlayerLoginData"
-	var dict : Dictionary = Dictionary()
-	dict["username"] = str(username)
-	dict["password"] = str(password)
-	dict["salt"] = str(salt)
-	db.insert_row(table_name, dict)
-		
+func dbConnect():
+	db = MariaDB.new()
+	print("Connecting to Database")
+	res = db.connect_db("127.0.0.1", 3306, "PlayerData", "root", "root")
+	if res != OK:
+		print("Failed to connect to the database")
+		return
+	print("Connected\n")
+
+func dbCreateAccount(username, password, salt):
+	print("Attempting to create account")
+	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
+	dbReportError(res)
+	print("Res: ", res)
+	return res
+
+func dbDeleteAccount(username, password, salt):
+	print("Attempting to delete account")
+	res = db.query("DELETE FROM playeraccounts WHERE username = '%s';" % [username])
+	dbReportError(res)
+	return res
+
+func dbRefreshPlayerIDs():
+	PlayerIDs = db.query("SELECT * FROM playeraccounts;")
+	dbReportError(res)
+
+func dbAddAuthToken(username, auth_token):
+	res = db.query("UPDATE playeraccounts SET auth_token = '%s' where username = '%s';" % [auth_token, username])
+	dbReportError(res)
+
+#player_ID becomes session_token here
+func dbAddSessionToken(session_token, auth_token):
+	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s';" % [session_token, auth_token])
+	dbReportError(res)
+
 func dbCheckUniqueUsername(username):
-	var result
-	for i in range(0, PlayerIDs.size()):
-		if PlayerIDs[i]["username"] == username:
-			print("username found in db")
-			return [true, username, PlayerIDs[i]["password"], PlayerIDs[i]["salt"]]
-		else:
-			result = [false, null, null, null]
-	return result
+	var res = [false, null, null, null, null]
+	for id in PlayerIDs:
+		if id["username"] == username:
+			res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
+			break
+	return res
 
-func dbRefreshDatabase():
-	db = SQLite.new()
-	db.path = db_path
-	db.open_db()
-	var table_name = "PlayerLoginData"
-	db.query("select * from " + table_name + ";")
-	PlayerIDs = db.query_result
-	db.close_db()	
+func dbReportError(err):
+	if err != OK:
+		print("Error: ", err)
+		return
+
+###Functions only used for Testing
+	
+func dbCheckAuthTokenExists(auth_token):
+	for id in PlayerIDs:
+		if id["auth_token"] == auth_token:
+			return true
+	return false
+
+func dbCheckSessionTokenExists(session_token):
+	for id in PlayerIDs:
+		if id["session_token"] == str(session_token):
+			return true
+	return false
+
 
 

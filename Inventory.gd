@@ -26,9 +26,11 @@ func prepare(path):
 	db.path = path
 
 func init():
-	open_db()
-	query("DROP TABLE " + table_name)
-	query(table_schema)
+	#Just temp to stop inventory being wiped during testing
+#	open_db()
+#	query("DROP TABLE " + table_name)
+#	query(table_schema)
+	pass
 
 func get_player_items(player_id):
 	return query(get_all_player_items_query(player_id))

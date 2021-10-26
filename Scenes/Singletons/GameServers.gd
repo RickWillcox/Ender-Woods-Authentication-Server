@@ -10,7 +10,7 @@ var gameserverlist = {}
 func _ready():
 	StartServer()
 	
-func _process(delta):
+func _process(_delta):
 	if not custom_multiplayer.has_network_peer():
 		return;
 	custom_multiplayer.poll();
@@ -35,10 +35,16 @@ func _Peer_Disconnected(gameserver_id):
 	print("Game Server: " + str(gameserver_id) + " Disconnected")		
 	
 func DistributeLoginToken(token, gameserver):
-	print(gameserverlist)
 	var gameserver_peer_id = gameserverlist[gameserver]
 	rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
+	
+	#Store token alongside players account for reference after using remote func ReceivePlayerTokenForDatabase(player_id, token).
+	print("Distribute token: ", token)
 
-remote func ReceivePlayerSessionToken(session_token, player_id):
-	print("Player ID: ", session_token)
-	print("Session Token: ", session_token)
+remote func ReceivePlayerTokenForDatabase(player_id, token):
+	#This token will then be matched to the correct entry in the database and
+#	player_id will be stored there. From then playerid will be used to make changes/read the database using rpc_get_sender_id() function
+#	 that player will then be allowed to make a change / read that data in the database
+	PlayerData.dbAddSessionToken(player_id, token)
+
+
