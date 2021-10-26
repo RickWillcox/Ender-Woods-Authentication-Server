@@ -37,8 +37,8 @@ func dbAddAuthToken(username, auth_token):
 	dbReportError(res)
 
 #player_ID becomes session_token here
-func dbAddSessionToken(player_id, auth_token):
-	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s';" % [player_id, auth_token])
+func dbAddSessionToken(session_token, auth_token):
+	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 
 func dbCheckUniqueUsername(username):

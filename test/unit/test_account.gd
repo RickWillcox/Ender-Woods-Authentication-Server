@@ -6,7 +6,7 @@ var test_username
 var test_password 
 var test_salt 
 var test_auth_token 
-var test_session_token = "00000000000000"
+var test_session_token = "0000000000"
 
 func before_all():
 	randomize()

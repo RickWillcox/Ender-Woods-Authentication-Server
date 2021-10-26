@@ -45,12 +45,6 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 	#This token will then be matched to the correct entry in the database and
 #	player_id will be stored there. From then playerid will be used to make changes/read the database using rpc_get_sender_id() function
 #	 that player will then be allowed to make a change / read that data in the database
-	print("Player ID: ", player_id)
-	print("Session Token: ", token)
-	print("-----------------------")
 	PlayerData.dbAddSessionToken(player_id, token)
 
-remote func TestAuthUsingPlayerID(player_id, test_data):
-	print("Player ID: ", player_id)
-	print("Test Data: ", test_data)
-	PlayerData.dbReadItem(player_id)
+
