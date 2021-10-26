@@ -10,7 +10,7 @@ var gameserverlist = {}
 func _ready():
 	StartServer()
 	
-func _process(delta):
+func _process(_delta):
 	if not custom_multiplayer.has_network_peer():
 		return;
 	custom_multiplayer.poll();
@@ -48,7 +48,9 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 	print("Player ID: ", player_id)
 	print("Session Token: ", token)
 	print("-----------------------")
+	PlayerData.dbAddPlayerID(player_id, token)
 
 remote func TestAuthUsingPlayerID(player_id, test_data):
 	print("Player ID: ", player_id)
 	print("Test Data: ", test_data)
+	PlayerData.dbReadItem(player_id)

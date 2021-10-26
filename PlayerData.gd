@@ -1,41 +1,78 @@
 extends Node
 
-const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns")
-var db
-var db_path = "user://PlayerLoginData.db"
+#const SQLite = preload("res://addons/godot-sqlite/bin/gdsqlite.gdns")
+##var db
+#var db_path = "user://PlayerLoginData.db"
 var PlayerIDs
 
-func _ready():
-	dbRefreshDatabase()	
+#### Maria DB
+var db: MariaDB
+var res 
 
-func dbNewPlayer(username, password, salt):
-	db = SQLite.new()
-	db.path = db_path
-	db.open_db()
-	var table_name = "PlayerLoginData"
-	var dict : Dictionary = Dictionary()
-	dict["username"] = str(username)
-	dict["password"] = str(password)
-	dict["salt"] = str(salt)
-	db.insert_row(table_name, dict)
-		
+func _ready():
+#	dbRefreshDatabase()	
+	pass
+
+func dbConnect():
+	db = MariaDB.new()
+	print("Connecting to Database")
+	res = db.connect_db("127.0.0.1", 3306, "PlayerData", "root", "root")
+	if res != OK:
+		print("Failed to connect to the database")
+		return
+	print("Connected\n")
+
+func dbCreateAccount(username, password, salt):
+	print("Attempting to create account")
+	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
+	dbReportError(res)
+	print("Res: ", res)
+	return res
+
+func dbDeleteAccount(username, password, salt):
+	print("Attempting to delete account")
+	res = db.query("DELETE FROM playeraccounts WHERE username = '" + str(username) + "';")
+	dbReportError(res)
+	return res
+
 func dbCheckUniqueUsername(username):
-	var result
-	for i in range(0, PlayerIDs.size()):
+	var res
+	for i in range (0, PlayerIDs.size()):
 		if PlayerIDs[i]["username"] == username:
-			print("username found in db")
 			return [true, username, PlayerIDs[i]["password"], PlayerIDs[i]["salt"]]
 		else:
-			result = [false, null, null, null]
-	return result
+			res = [false, null, null, null]
+	return res
 
-func dbRefreshDatabase():
-	db = SQLite.new()
-	db.path = db_path
-	db.open_db()
-	var table_name = "PlayerLoginData"
-	db.query("select * from " + table_name + ";")
-	PlayerIDs = db.query_result
-	db.close_db()	
+func dbRefreshPlayerIDs():
+	print("Refreshing PlayerIDs")
+	PlayerIDs = db.query("SELECT * FROM playeraccounts;")
+	dbReportError(res)
 
+func dbAddAuthToken(username, auth_token):
+	print("Print Adding Auth token")
+	res = db.query("UPDATE playeraccounts SET auth_token = '%s' where username = '%s'" % [auth_token, username])
+	dbReportError(res)
+
+#player_ID becomes session_token here
+func dbAddSessionToken(player_id, auth_token):
+	print("Adding Session Token")
+	res = db.query("UPDATE playeraccounts SET session_token = '%s' where auth_token = '%s'" % [player_id, auth_token])
+	dbReportError(res)
+	
+#func dbReadItem(player_id):
+#	db = SQLite.new()
+#	db.path = db_path
+#	db.open_db()
+#	db.query("select ID from PlayerLoginData where session_token = '" + str(player_id) + "'")
+#	var result = db.query_result[0]["ID"]
+#	print(result)
+#	db.query("Select * from Inventory where player_id = '" + str(result) + "'")
+#	var inven = db.query_result
+#	print(inven)
+
+func dbReportError(err):
+	if err != OK:
+		print("Failed to insert data into hello_world! Error: %d", err)
+		return
 

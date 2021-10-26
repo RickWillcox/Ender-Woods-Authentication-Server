@@ -25,6 +25,10 @@ Inventory="*res://Inventory.gd"
 
 enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg" )
 
+[global]
+
+plug=false
+
 [physics]
 
 common/enable_pause_aware_picking=true
