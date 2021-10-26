@@ -39,7 +39,12 @@ remote func AuthenticatePlayer(username, password, player_id):
 	var db_player_username = auth_player_data[1]
 	var db_player_password = auth_player_data[2]
 	var db_salt = auth_player_data[3]
-	if username_exists == false:
+	var db_can_login = auth_player_data[4]
+	
+	if db_can_login == str(0):
+		print("You are banned")
+		result = false
+	elif username_exists == false:
 		print("User not found")
 		result = false
 	else:

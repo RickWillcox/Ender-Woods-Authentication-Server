@@ -45,10 +45,10 @@ func dbCheckUniqueUsername(username):
 	var res
 	for id in PlayerIDs:
 		if id["username"] == username:
-			res = [true, id["username"], id["password"], id["salt"]]
+			res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
 			break
 		else:
-			res = [false, null, null, null]
+			res = [false, null, null, null, null]
 	return res	
 
 func dbReportError(err):
