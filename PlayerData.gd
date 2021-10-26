@@ -42,14 +42,12 @@ func dbAddSessionToken(session_token, auth_token):
 	dbReportError(res)
 
 func dbCheckUniqueUsername(username):
-	var res
+	var res = [false, null, null, null, null]
 	for id in PlayerIDs:
 		if id["username"] == username:
 			res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
 			break
-		else:
-			res = [false, null, null, null, null]
-	return res	
+	return res
 
 func dbReportError(err):
 	if err != OK:
