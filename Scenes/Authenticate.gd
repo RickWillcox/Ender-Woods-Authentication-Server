@@ -8,8 +8,6 @@ var auth_hashed_password
 var salt
 
 func _ready():
-	PlayerData.dbConnect()
-	PlayerData.dbRefreshPlayerIDs()
 	StartServer()
 		
 func StartServer():

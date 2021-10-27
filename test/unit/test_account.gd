@@ -8,6 +8,7 @@ var test_salt
 var test_auth_token 
 var test_session_token = "0000000000"
 var res
+var db
 
 func before_all():
 	randomize()
@@ -16,7 +17,7 @@ func before_all():
 	test_salt = generate_word(characters, 25).sha256_text()
 	test_auth_token = generate_word(characters, 25).sha256_text()
 	print("Auth Token test: ", test_auth_token)
-	PlayerData.dbConnect()
+	db = DatabaseConnection.db
 	PlayerData.dbRefreshPlayerIDs()
 
 func test_Account():

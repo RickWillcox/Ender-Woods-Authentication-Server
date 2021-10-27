@@ -3,17 +3,11 @@ extends Node
 var PlayerIDs
 
 #### Maria DB
-var db: MariaDB
 var res 
+var db
 
-func dbConnect():
-	db = MariaDB.new()
-	print("Connecting to Database")
-	res = db.connect_db("127.0.0.1", 3306, "PlayerData", "root", "root")
-	if res != OK:
-		print("Failed to connect to the database")
-		return
-	print("Connected\n")
+func _ready():
+	db = DatabaseConnection.db
 
 func dbCreateAccount(username, password, salt, test_case):
 	print("Attempting to create account")
