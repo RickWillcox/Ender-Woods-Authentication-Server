@@ -14,3 +14,4 @@ func dbConnect():
 
 func _ready():
 	dbConnect()
+	

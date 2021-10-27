@@ -6,7 +6,7 @@ var test_username
 var test_password 
 var test_salt 
 var test_auth_token 
-var test_session_token = "0000000000"
+var test_session_token
 var res
 var db
 
@@ -16,7 +16,7 @@ func before_all():
 	test_password = generate_word(characters, 25).sha256_text()
 	test_salt = generate_word(characters, 25).sha256_text()
 	test_auth_token = generate_word(characters, 25).sha256_text()
-	print("Auth Token test: ", test_auth_token)
+	test_session_token = generate_word(numbers, 10)
 	db = DatabaseConnection.db
 	PlayerData.dbRefreshPlayerIDs()
 
@@ -25,6 +25,7 @@ func test_Account():
 	subtest_AddAuthToken()
 	subtest_AddSessionToken()
 	subtest_AddItemSlots()
+	subtest_dbAddNewItem()
 	subtest_DeleteAccount()
 	
 func subtest_CreateAccount():
@@ -42,9 +43,14 @@ func subtest_AddSessionToken():
 func subtest_AddItemSlots():
 	res = PlayerData.dbAddItemSlots(test_username)
 	assert_eq(0, res, "Add Item Slots")
+
+func subtest_dbAddNewItem():
+	for i in range(35):
+		res = PlayerData.dbAddNewItem(test_session_token, 1)
+	assert_eq(0, res, "Add New item")
 	
 func subtest_DeleteAccount():
-	res = PlayerData.dbDeleteAccount(test_username, test_password, test_salt)
+	res = PlayerData.dbDeleteAccount(test_session_token, test_username, test_password, test_salt)
 	assert_eq(0, res, "Delete Account")
 	
 func generate_word(chars, length):

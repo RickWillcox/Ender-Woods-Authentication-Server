@@ -57,11 +57,7 @@ remote func AuthenticatePlayer(username, password, player_id):
 			result = true
 			
 			randomize()
-			####OR token = str(randi()).sha256_text() + str(OS.get_unix_time())
-			var random_number = randi()
-			var hashed = str(random_number).sha256_text()
-			var timestamp = str(OS.get_unix_time())
-			token = hashed + timestamp
+			token = str(randi()).sha256_text() + str(OS.get_unix_time())
 			var gameserver = "GameServer1"
 			GameServers.DistributeLoginToken(token, gameserver)
 			PlayerData.dbAddAuthToken(username, token)
@@ -72,6 +68,7 @@ remote func AuthenticatePlayer(username, password, player_id):
 	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
 
 remote func CreateAccount(username, password, player_id):
+
 	PlayerData.dbRefreshPlayerIDs()	
 	var gateway_id = get_tree().get_rpc_sender_id()
 	var result
