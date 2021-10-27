@@ -49,7 +49,6 @@ func dbAddSessionToken(session_token, auth_token):
 	dbReportError(res)
 	return res
 	
-#
 ########### Inventory ##############
 
 func dbAddNewItem(session_token, item_id):
@@ -57,19 +56,22 @@ func dbAddNewItem(session_token, item_id):
 	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id IS NULL" % [acc_id])
 	if res == []:
 		print("Inventory is Full")
-		return
+		return 
 	#res[0] is the first non occupied item slot
 	var first_free_slot = int(res[0]["item_slot"])
 	res = db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
 	return res
 
 func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
+	#change this later with better swap query
+	#you are always holding item a and swapping to item b
 	var acc_id = dbGetAccountID(session_token)
-	res = db.query("""
-	SELECT * FROM playerinventories WHERE account_id = %d AND item_slot = %d;
-	""" % [acc_id, old_slot_number])
-
-
+	print(acc_id)
+	var item_a = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, old_slot_number])[0]["item_id"]
+	var item_b = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, new_slot_number])[0]["item_id"]
+	var res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
+	var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
+	return [res1, res2]
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
 	return db.query("SELECT * FROM playeraccounts WHERE session_token = '%s'" % [session_token])

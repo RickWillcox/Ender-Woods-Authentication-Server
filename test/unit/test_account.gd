@@ -26,6 +26,7 @@ func test_Account():
 	subtest_AddSessionToken()
 	subtest_AddItemSlots()
 	subtest_dbAddNewItem()
+	subtext_ChangeItemSlot()
 	subtest_DeleteAccount()
 	
 func subtest_CreateAccount():
@@ -43,6 +44,11 @@ func subtest_AddSessionToken():
 func subtest_AddItemSlots():
 	res = PlayerData.dbAddItemSlots(test_username)
 	assert_eq(0, res, "Add Item Slots")
+	
+func subtext_ChangeItemSlot():
+	res = PlayerData.dbChangeItemSlot(test_session_token, 1, 2)
+	assert_eq(0, res[0], "Add Item Slots 1")
+	assert_eq(0, res[1], "Add Item Slots 2")
 
 func subtest_dbAddNewItem():
 	for i in range(35):
