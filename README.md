@@ -2,6 +2,8 @@
 
 ## Installation
 
+### MariaDB
+
 1. Download and Install [MariaDB](https://mariadb.org/download/?rel=10.6.4&prod=mariadb&os=windows&cpu=x86_64&pkg=msi&mirror=digital-pacific)
 
 When you run it for the first time it will be run as a service on start up in the background. You should not need to do anything with this after completing this step once.
