@@ -66,7 +66,6 @@ remote func AuthenticatePlayer(username, password, player_id):
 			token = hashed + timestamp
 			var gameserver = "GameServer1"
 			GameServers.DistributeLoginToken(token, gameserver)
-			
 			PlayerData.dbAddAuthToken(username, token)
 		
 		
@@ -88,7 +87,7 @@ remote func CreateAccount(username, password, player_id):
 		message = 3
 		var salt = GenerateSalt()
 		var hashed_password = GenerateHashedPassword(password, salt)
-		PlayerData.dbCreateAccount(username, hashed_password, salt)
+		PlayerData.dbCreateAccount(username, hashed_password, salt, false)
 
 	rpc_id(gateway_id, "CreateAccountResults", result, player_id, message)
 

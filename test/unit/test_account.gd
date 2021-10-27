@@ -7,6 +7,7 @@ var test_password
 var test_salt 
 var test_auth_token 
 var test_session_token = "0000000000"
+var res
 
 func before_all():
 	randomize()
@@ -22,31 +23,28 @@ func test_Account():
 	subtest_CreateAccount()
 	subtest_AddAuthToken()
 	subtest_AddSessionToken()
+	subtest_AddItemSlots()
 	subtest_DeleteAccount()
 	
 func subtest_CreateAccount():
-	PlayerData.dbCreateAccount(test_username, test_password, test_salt)
-	PlayerData.dbRefreshPlayerIDs()
-	var res = PlayerData.dbCheckUniqueUsername(test_username)
-	assert_true(res[0], "Create Account")
+	res = PlayerData.dbCreateAccount(test_username, test_password, test_salt, true)
+	assert_eq(0, res, "Create Account")
 	
 func subtest_AddAuthToken():
-	PlayerData.dbAddAuthToken(test_username, test_auth_token)
-	PlayerData.dbRefreshPlayerIDs()
-	var res = PlayerData.dbCheckAuthTokenExists(test_auth_token)
-	assert_true(res, "Add Auth Token")
+	res = PlayerData.dbAddAuthToken(test_username, test_auth_token)
+	assert_eq(0, res, "Add Auth Token")
 
 func subtest_AddSessionToken():
-	PlayerData.dbAddSessionToken(test_session_token, test_auth_token)
-	PlayerData.dbRefreshPlayerIDs()
-	var res = PlayerData.dbCheckSessionTokenExists(test_session_token)
-	assert_true(res, "Add Session Token")
+	res = PlayerData.dbAddSessionToken(test_session_token, test_auth_token)
+	assert_eq(0, res, "Add Session Token")
 
+func subtest_AddItemSlots():
+	res = PlayerData.dbAddItemSlots(test_username)
+	assert_eq(0, res, "Add Item Slots")
+	
 func subtest_DeleteAccount():
-	PlayerData.dbDeleteAccount(test_username, test_password, test_salt)
-	PlayerData.dbRefreshPlayerIDs()
-	var res = PlayerData.dbCheckUniqueUsername(test_username)
-	assert_false(res[0], "Delete Account")
+	res = PlayerData.dbDeleteAccount(test_username, test_password, test_salt)
+	assert_eq(0, res, "Delete Account")
 	
 func generate_word(chars, length):
 	var word: String
