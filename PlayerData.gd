@@ -72,6 +72,34 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	var res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
 	var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
 	return [res1, res2]
+
+func dbItemAllowedInSlot(item_id, item_slot):
+	var allowed_in_new_slot = false
+	if item_slot <= 25:
+		allowed_in_new_slot = true
+	elif item_slot == 26 and item_id == 1:
+		allowed_in_new_slot = true
+	elif item_slot == 27 and item_id == 2:
+		allowed_in_new_slot = true
+	elif item_slot == 28 and item_id == 9:
+		allowed_in_new_slot = true
+	elif item_slot == 29 and item_id == 6:
+		allowed_in_new_slot = true
+	elif item_slot == 30 and item_id == 7:
+		allowed_in_new_slot = true
+	elif item_slot == 31 and item_id == 3:
+		allowed_in_new_slot = true
+	elif item_slot == 32 and item_id == 8:
+		allowed_in_new_slot = true
+	elif item_slot == 33 and item_id == 8:
+		allowed_in_new_slot = true
+	elif item_slot == 34 and item_id == 4:
+		allowed_in_new_slot = true
+	elif item_slot == 35 and item_id == 5:
+		allowed_in_new_slot = true
+	return allowed_in_new_slot
+		
+
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
 	return db.query("SELECT * FROM playeraccounts WHERE session_token = '%s'" % [session_token])

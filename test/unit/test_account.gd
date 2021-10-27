@@ -28,7 +28,8 @@ func test_Account():
 	subtest_dbAddNewItem()
 	subtext_ChangeItemSlot()
 	subtest_DeleteAccount()
-	
+
+########### Account Tests ##############
 func subtest_CreateAccount():
 	res = PlayerData.dbCreateAccount(test_username, test_password, test_salt, true)
 	assert_eq(0, res, "Create Account")
@@ -40,24 +41,32 @@ func subtest_AddAuthToken():
 func subtest_AddSessionToken():
 	res = PlayerData.dbAddSessionToken(test_session_token, test_auth_token)
 	assert_eq(0, res, "Add Session Token")
+	
+func subtest_DeleteAccount():
+	res = PlayerData.dbDeleteAccount(test_session_token, test_username, test_password, test_salt)
+	assert_eq(0, res, "Delete Account")
+
+########### Item / Inventory Tests ##############
 
 func subtest_AddItemSlots():
 	res = PlayerData.dbAddItemSlots(test_username)
 	assert_eq(0, res, "Add Item Slots")
-	
-func subtext_ChangeItemSlot():
-	res = PlayerData.dbChangeItemSlot(test_session_token, 1, 2)
-	assert_eq(0, res[0], "Add Item Slots 1")
-	assert_eq(0, res[1], "Add Item Slots 2")
 
 func subtest_dbAddNewItem():
 	for i in range(35):
 		res = PlayerData.dbAddNewItem(test_session_token, 1)
 	assert_eq(0, res, "Add New item")
 	
-func subtest_DeleteAccount():
-	res = PlayerData.dbDeleteAccount(test_session_token, test_username, test_password, test_salt)
-	assert_eq(0, res, "Delete Account")
+func subtext_ChangeItemSlot():
+	res = PlayerData.dbChangeItemSlot(test_session_token, 1, 2)
+	assert_eq(0, res[0], "Add Item Slots 1")
+	assert_eq(0, res[1], "Add Item Slots 2")
+
+func subtext_ItemAllowedInSlot():
+	res = PlayerData.dbItemAllowedInSlot()
+
+	
+
 	
 func generate_word(chars, length):
 	var word: String
