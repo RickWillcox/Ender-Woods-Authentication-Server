@@ -8,7 +8,7 @@ var db
 
 func _ready():
 	db = DatabaseConnection.db
-
+	dbItemAllowedInSlot(26, 1)
 ########### Account Functions ##############
 
 func dbCreateAccount(username, password, salt, test_case):
@@ -53,7 +53,7 @@ func dbAddSessionToken(session_token, auth_token):
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
-	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id IS NULL" % [acc_id])
+	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id IS NULL AND item_slot < 26" % [acc_id])
 	if res == []:
 		print("Inventory is Full")
 		return 
@@ -73,7 +73,7 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
 	return [res1, res2]
 
-func dbItemAllowedInSlot(item_id, item_slot):
+func dbItemAllowedInSlot(item_slot, item_id):
 	var allowed_in_new_slot = false
 	if item_slot <= 25:
 		allowed_in_new_slot = true

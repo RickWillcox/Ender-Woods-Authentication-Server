@@ -53,7 +53,7 @@ func subtest_AddItemSlots():
 	assert_eq(0, res, "Add Item Slots")
 
 func subtest_dbAddNewItem():
-	for i in range(35):
+	for i in range(25):
 		res = PlayerData.dbAddNewItem(test_session_token, 1)
 	assert_eq(0, res, "Add New item")
 	
@@ -63,8 +63,8 @@ func subtext_ChangeItemSlot():
 	assert_eq(0, res[1], "Add Item Slots 2")
 
 func subtext_ItemAllowedInSlot():
-	res = PlayerData.dbItemAllowedInSlot()
-
+#	res = PlayerData.dbItemAllowedInSlot()
+	pass
 	
 
 	
