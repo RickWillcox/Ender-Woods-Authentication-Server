@@ -1,0 +1,1 @@
+START /b "" "3.3.4 MariaDB.exe" --no-window
