@@ -6,7 +6,7 @@ var res
 func dbConnect():
 	db = MariaDB.new()
 	print("Connecting to Database")
-	res = db.connect_db("127.0.0.1", 3306, "PlayerData", "root", "root")
+	res = db.connect_db("127.0.0.1", 3306, "playerdata", "admin", "root")
 	if res != OK:
 		print("Failed to connect to the database")
 		return

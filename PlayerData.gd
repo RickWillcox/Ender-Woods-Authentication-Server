@@ -8,7 +8,8 @@ var db
 
 func _ready():
 	db = DatabaseConnection.db
-	dbItemAllowedInSlot(26, 1)
+	res = db.query("SELECT * FROM playeraccounts;")
+	print(res)
 ########### Account Functions ##############
 
 func dbCreateAccount(username, password, salt, test_case):

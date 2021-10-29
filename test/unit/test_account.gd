@@ -27,7 +27,7 @@ func test_Account():
 	subtest_AddItemSlots()
 	subtest_dbAddNewItem()
 	subtext_ChangeItemSlot()
-	subtest_DeleteAccount()
+
 
 ########### Account Tests ##############
 func subtest_CreateAccount():
