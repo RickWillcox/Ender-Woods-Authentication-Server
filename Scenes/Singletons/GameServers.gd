@@ -51,4 +51,10 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 func SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token):
 	rpc_id(world_server_id, "ReceivePlayerInventory", inventory_data, session_token)
 
+remote func GetAllItemsFromDatabase():
+	PlayerData.dbGetAllItemsInDatabase()
+
+func SendAllItemDataToWorldServers(all_item_data):
+	rpc_id(0, "ReceiveItemData", all_item_data)
+	
 
