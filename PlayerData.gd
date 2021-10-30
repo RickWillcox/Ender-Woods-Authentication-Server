@@ -60,12 +60,17 @@ func dbAddWorldServerID(session_token, world_server_id):
 
 func dbGetInventory(session_token, world_server_id):
 	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
-	return [db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id]), world_server_id]
+	var inventory = []
+	res = db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id])
+	for i in range(res.size()):
+		inventory.append([res[i]["item_slot"], res[i]["item_id"]])
+	print(inventory)
+	return [inventory, world_server_id]
 	
 func dbAddItemSlots(username):
 	var acc_id = int(dbReturnAccountIDUsingUsername(username)[0]["account_id"])
 	for i in range(1, 36):
-			res = db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES ('%d', '%d', %s);" % [acc_id, i, null])
+			res = db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES ('%d', '%d', %s);" % [acc_id, i, 0])
 	return res
 
 func dbAddNewItem(session_token, item_id):

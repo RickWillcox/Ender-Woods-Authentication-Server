@@ -30,7 +30,7 @@ func test_Account():
 	subtest_AddNewItem()
 	subtext_ChangeItemSlot()
 	subtest_AddWorldServerID()
-#	subtest_DeleteAccount()
+	subtest_DeleteAccount()
 	subtext_ItemAllowedInSlot()
 
 
@@ -78,7 +78,7 @@ func subtext_ItemAllowedInSlot(): #item_slot > item_id
 	assert_false(ItemCategories.ItemAllowedInSlot(29, 9), "INVALID: item 9 into slot 29")
 	assert_false(ItemCategories.ItemAllowedInSlot(29, 9), "INVALID: item 4 into slot 35")
 	
-	
+#Function to generate a random string of characters for testing purposes	
 func generate_word(chars, length):
 	var word: String
 	var n_char = len(chars)
