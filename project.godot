@@ -25,7 +25,7 @@ Inventory="*res://Inventory.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/port/plugin.cfg" )
 
 [global]
 
