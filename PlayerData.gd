@@ -43,8 +43,8 @@ func dbAddSessionToken(session_token, auth_token, world_server_id):
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 	if res == OK:
-		var inventory_data = dbGetInventory(session_token)
-		GameServers.SendUpdatedInventoryToClient(inventory_data)
+		var inventory_data = dbGetInventory(session_token, world_server_id)
+		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
 	else:
 		#Send failed to add session token code if needed
@@ -58,9 +58,9 @@ func dbAddWorldServerID(session_token, world_server_id):
 	
 ########### Inventory ##############
 
-func dbGetInventory(session_token):
+func dbGetInventory(session_token, world_server_id):
 	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
-	return db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id])
+	return [db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id]), world_server_id]
 	
 func dbAddItemSlots(username):
 	var acc_id = int(dbReturnAccountIDUsingUsername(username)[0]["account_id"])

@@ -48,7 +48,7 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 	var world_server_id = get_tree().get_rpc_sender_id()
 	PlayerData.dbAddSessionToken(player_id, token, world_server_id)
 	
-func SendUpdatedInventoryToClient(inventory_data):
-	pass
+func SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token):
+	rpc_id(world_server_id, "ReceivePlayerInventory", inventory_data, session_token)
 
 
