@@ -45,6 +45,10 @@ remote func ReceivePlayerTokenForDatabase(player_id, token):
 	#This token will then be matched to the correct entry in the database and
 #	player_id will be stored there. From then playerid will be used to make changes/read the database using rpc_get_sender_id() function
 #	 that player will then be allowed to make a change / read that data in the database
-	PlayerData.dbAddSessionToken(player_id, token)
+	var world_server_id = get_tree().get_rpc_sender_id()
+	PlayerData.dbAddSessionToken(player_id, token, world_server_id)
+	
+func SendUpdatedInventoryToClient(inventory_data):
+	pass
 
 

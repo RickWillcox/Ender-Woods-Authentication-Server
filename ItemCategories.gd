@@ -1,34 +1,44 @@
 extends Node
 
-#Maybe move change script to the server interface submodule structure? That why client and auth have the same IDs all the time. 
+#Maybe move change script to the server interface submodule structure? 
+#That way client and auth have the same IDs all the time. 
 
-var head: int 
-var chest: int 
-var hands: int 
-var legs: int 
-var feet: int 
-var main_hand: int 
-var off_hand: int 
-var ring: int 
-var amulet: int 
-var consumable: int 
-var quest: int 
+var none: int = 0
+var head: int = 1
+var chest: int = 2
+var hands: int = 3
+var legs: int = 4
+var feet: int = 5
+var main_hand: int = 6
+var off_hand: int = 7
+var ring: int = 8
+var amulet: int = 9
+var consumable: int = 10 
+var quest: int = 11
 
+func ItemAllowedInSlot(item_slot, item_id):
+	var allowed_in_new_slot = false
+	if item_slot <= 25:
+		allowed_in_new_slot = true
+	elif item_slot == 26 and item_id == 1:
+		allowed_in_new_slot = true
+	elif item_slot == 27 and item_id == 2:
+		allowed_in_new_slot = true
+	elif item_slot == 28 and item_id == 9:
+		allowed_in_new_slot = true
+	elif item_slot == 29 and item_id == 6:
+		allowed_in_new_slot = true
+	elif item_slot == 30 and item_id == 7:
+		allowed_in_new_slot = true
+	elif item_slot == 31 and item_id == 3:
+		allowed_in_new_slot = true
+	elif item_slot == 32 and item_id == 8:
+		allowed_in_new_slot = true
+	elif item_slot == 33 and item_id == 8:
+		allowed_in_new_slot = true
+	elif item_slot == 34 and item_id == 4:
+		allowed_in_new_slot = true
+	elif item_slot == 35 and item_id == 5:
+		allowed_in_new_slot = true
+	return allowed_in_new_slot
 
-
-func _ready():
-	var db = DatabaseConnection.db
-#	var res = db.query("SELECT * FROM itemcategories")
-#	head = int(res[0]["equip_id"])
-#	chest = int(res[1]["equip_id"])
-#	hands = int(res[2]["equip_id"])
-#	legs = int(res[3]["equip_id"])
-#	feet = int(res[4]["equip_id"])
-#	main_hand = int(res[5]["equip_id"])
-#	off_hand = int(res[6]["equip_id"])
-#	ring = int(res[7]["equip_id"])
-#	amulet = int(res[8]["equip_id"])
-#	consumable = int(res[9]["equip_id"])
-#	quest = int(res[10]["equip_id"])
-#	print("Item Categories Populated")
-	

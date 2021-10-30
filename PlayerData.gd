@@ -21,12 +21,6 @@ func dbCreateAccount(username, password, salt, test_case):
 	dbReportError(res)
 	return res
 
-func dbAddItemSlots(username):
-	var acc_id = int(dbReturnAccountIDUsingUsername(username)[0]["account_id"])
-	for i in range(1, 36):
-			res = db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES ('%d', '%d', %s);" % [acc_id, i, null])
-	return res
-
 func dbDeleteAccount(session_token, username, password, salt):
 	print("Attempting to delete account")
 	var user_data = dbReturnAccountData(session_token)
@@ -44,13 +38,35 @@ func dbAddAuthToken(username, auth_token):
 	dbReportError(res)
 	return res
 
-func dbAddSessionToken(session_token, auth_token):
+func dbAddSessionToken(session_token, auth_token, world_server_id):
 	#player_ID becomes session_token here
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
+	dbReportError(res)
+	if res == OK:
+		var inventory_data = dbGetInventory(session_token)
+		GameServers.SendUpdatedInventoryToClient(inventory_data)
+		pass
+	else:
+		#Send failed to add session token code if needed
+		pass
+	return res
+
+func dbAddWorldServerID(session_token, world_server_id):
+	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %s" %[world_server_id, session_token])
 	dbReportError(res)
 	return res
 	
 ########### Inventory ##############
+
+func dbGetInventory(session_token):
+	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
+	return db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id])
+	
+func dbAddItemSlots(username):
+	var acc_id = int(dbReturnAccountIDUsingUsername(username)[0]["account_id"])
+	for i in range(1, 36):
+			res = db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES ('%d', '%d', %s);" % [acc_id, i, null])
+	return res
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
@@ -60,8 +76,9 @@ func dbAddNewItem(session_token, item_id):
 		return 
 	#res[0] is the first non occupied item slot
 	var first_free_slot = int(res[0]["item_slot"])
-	res = db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
-	return res
+	if ItemCategories.ItemAllowedInSlot(first_free_slot, item_id):
+		return db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
+		
 
 func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	#change this later with better swap query
@@ -70,36 +87,12 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	print(acc_id)
 	var item_a = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, old_slot_number])[0]["item_id"]
 	var item_b = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, new_slot_number])[0]["item_id"]
-	var res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
-	var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
-	return [res1, res2]
-
-func dbItemAllowedInSlot(item_slot, item_id):
-	var allowed_in_new_slot = false
-	if item_slot <= 25:
-		allowed_in_new_slot = true
-	elif item_slot == 26 and item_id == 1:
-		allowed_in_new_slot = true
-	elif item_slot == 27 and item_id == 2:
-		allowed_in_new_slot = true
-	elif item_slot == 28 and item_id == 9:
-		allowed_in_new_slot = true
-	elif item_slot == 29 and item_id == 6:
-		allowed_in_new_slot = true
-	elif item_slot == 30 and item_id == 7:
-		allowed_in_new_slot = true
-	elif item_slot == 31 and item_id == 3:
-		allowed_in_new_slot = true
-	elif item_slot == 32 and item_id == 8:
-		allowed_in_new_slot = true
-	elif item_slot == 33 and item_id == 8:
-		allowed_in_new_slot = true
-	elif item_slot == 34 and item_id == 4:
-		allowed_in_new_slot = true
-	elif item_slot == 35 and item_id == 5:
-		allowed_in_new_slot = true
-	return allowed_in_new_slot
-		
+	if ItemCategories.ItemAllowedInSlot(old_slot_number, item_b):
+		if ItemCategories.ItemAllowedInSlot(new_slot_number, item_a):
+			var res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
+			var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
+			return [res1, res2]
+	#add failed to swap code here (invalid swap)
 
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
