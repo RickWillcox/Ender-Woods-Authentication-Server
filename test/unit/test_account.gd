@@ -44,7 +44,7 @@ func subtest_AddAuthToken():
 	assert_eq(0, res, "Add Auth Token")
 
 func subtest_AddSessionToken():
-	res = PlayerData.dbAddSessionToken(test_session_token, test_auth_token, test_world_server_id)
+	res = PlayerData.dbAddSessionToken(test_session_token, test_auth_token, test_world_server_id, true)
 	assert_eq(0, res, "Add Session Token")
 
 func subtest_AddWorldServerID():

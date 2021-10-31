@@ -8,6 +8,7 @@ var auth_hashed_password
 var salt
 
 func _ready():
+	OS.set_window_position(Vector2(0,0))
 	StartServer()
 		
 func StartServer():

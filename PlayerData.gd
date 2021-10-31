@@ -38,11 +38,11 @@ func dbAddAuthToken(username, auth_token):
 	dbReportError(res)
 	return res
 
-func dbAddSessionToken(session_token, auth_token, world_server_id):
+func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
 	#player_ID becomes session_token here
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
-	if res == OK:
+	if res == OK and not test_case:
 		var inventory_data = dbGetInventory(session_token, world_server_id)
 		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
@@ -75,8 +75,8 @@ func dbAddItemSlots(username):
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
-	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id IS NULL AND item_slot < 26" % [acc_id])
-	if res == []:
+	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id = 0 AND item_slot < 26" % [acc_id])
+	if res == null:
 		print("Inventory is Full")
 		return 
 	#res[0] is the first non occupied item slot
