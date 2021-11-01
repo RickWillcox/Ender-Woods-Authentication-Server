@@ -4,6 +4,8 @@ var PlayerIDs
 
 #### Maria DB
 var res 
+var res1
+var res2
 var db
 
 func _ready():
@@ -96,14 +98,15 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	var item_b = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, new_slot_number])[0]["item_id"]
 	if ItemCategories.ItemAllowedInSlot(old_slot_number, item_b):
 		if ItemCategories.ItemAllowedInSlot(new_slot_number, item_a):
-			var res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
-			var res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
+			res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
+			res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
 			return [res1, res2]
 	#add failed to swap code here (invalid swap)
 
 func dbGetAllItemsInDatabase():
-	res = db.query("SELECT * FROM items")
-	GameServers.SendAllItemDataToWorldServers(res)
+	res1 = db.query("SELECT * FROM items")
+	res2 = db.query("SELECT * FROM itemcategories")
+	GameServers.SendAllItemDataToWorldServers(res1, res2)
 
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
