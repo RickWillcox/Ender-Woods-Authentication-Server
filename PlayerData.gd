@@ -75,13 +75,15 @@ func dbAddItemSlots(username):
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
+	res = (db.query("SELECT item_category_id FROM items WHERE item_id = %d" % [item_id]))[0]["item_category_id"]
+	var item_category = res
 	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id = 0 AND item_slot < 26" % [acc_id])
 	if res == null:
 		print("Inventory is Full")
 		return 
 	#res[0] is the first non occupied item slot
 	var first_free_slot = int(res[0]["item_slot"])
-	if ItemCategories.ItemAllowedInSlot(first_free_slot, item_id):
+	if ItemCategories.ItemAllowedInSlot(first_free_slot, item_category):
 		return db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
 		
 

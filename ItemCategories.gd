@@ -16,29 +16,30 @@ var amulet: int = 9
 var consumable: int = 10 
 var quest: int = 11
 
-func ItemAllowedInSlot(item_slot, item_id):
+func ItemAllowedInSlot(item_slot, item_category_id):
 	var allowed_in_new_slot = false
 	if item_slot <= 25:
 		allowed_in_new_slot = true
-	elif item_slot == 26 and item_id == 1:
+	elif item_slot == 26 and item_category_id == 1:
 		allowed_in_new_slot = true
-	elif item_slot == 27 and item_id == 2:
+	elif item_slot == 27 and item_category_id == 2:
 		allowed_in_new_slot = true
-	elif item_slot == 28 and item_id == 9:
+	elif item_slot == 28 and item_category_id == 9:
 		allowed_in_new_slot = true
-	elif item_slot == 29 and item_id == 6:
+	elif item_slot == 29 and item_category_id == 6:
 		allowed_in_new_slot = true
-	elif item_slot == 30 and item_id == 7:
+	elif item_slot == 30 and item_category_id == 7:
 		allowed_in_new_slot = true
-	elif item_slot == 31 and item_id == 3:
+	elif item_slot == 31 and item_category_id == 3:
 		allowed_in_new_slot = true
-	elif item_slot == 32 and item_id == 8:
+	elif item_slot == 32 and item_category_id == 8:
 		allowed_in_new_slot = true
-	elif item_slot == 33 and item_id == 8:
+	elif item_slot == 33 and item_category_id == 8:
 		allowed_in_new_slot = true
-	elif item_slot == 34 and item_id == 4:
+	elif item_slot == 34 and item_category_id == 4:
 		allowed_in_new_slot = true
-	elif item_slot == 35 and item_id == 5:
+	elif item_slot == 35 and item_category_id == 5:
 		allowed_in_new_slot = true
 	return allowed_in_new_slot
+
 
