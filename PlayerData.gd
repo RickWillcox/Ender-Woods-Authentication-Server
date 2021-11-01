@@ -6,6 +6,7 @@ var PlayerIDs
 var res 
 var res1
 var res2
+var res3
 var db
 
 func _ready():
@@ -106,7 +107,8 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 func dbGetAllItemsInDatabase():
 	res1 = db.query("SELECT * FROM items")
 	res2 = db.query("SELECT * FROM itemcategories")
-	GameServers.SendAllItemDataToWorldServers(res1, res2)
+	res3 = db.query("SELECT * FROM equipslots")
+	GameServers.SendAllItemDataToWorldServers(res1, res2, res3)
 
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
