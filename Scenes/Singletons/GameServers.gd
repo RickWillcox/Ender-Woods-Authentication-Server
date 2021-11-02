@@ -5,7 +5,8 @@ var gateway_api = MultiplayerAPI.new()
 var port = 1912
 var max_players = 100
 
-var gameserverlist = {}
+var world_server_dict = {0: null,1: null,2: null,3: null,4: null}
+
 
 func _ready():
 	StartServer()
@@ -28,15 +29,26 @@ func StartServer():
 func _Peer_Connected(gameserver_id):
 	print("Game Server: " + str(gameserver_id) + " Connected")
 	##this is where you would load balance
-	gameserverlist["GameServer1"] = gameserver_id
-	print("peer...connected", gameserverlist)
+	for index in world_server_dict:
+		if world_server_dict[index] == null:
+			world_server_dict[index] = gameserver_id
+			break
+	print("peer...connected", world_server_dict)
 
 func _Peer_Disconnected(gameserver_id):
 	print("Game Server: " + str(gameserver_id) + " Disconnected")		
+	#remove the world server id from the world_server_dict
+	for index in world_server_dict:
+		if world_server_dict[index] == gameserver_id:
+			world_server_dict[index] = null
 	
-func DistributeLoginToken(token, gameserver):
-	var gameserver_peer_id = gameserverlist[gameserver]
-	rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
+func DistributeLoginToken(token, gameserver_id, world_to_connect_to):
+	var gameserver_peer_id = world_server_dict[world_to_connect_to]
+	if gameserver_peer_id != null:
+		rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
+	else:
+		pass
+		#send failed message to user
 	
 	#Store token alongside players account for reference after using remote func ReceivePlayerTokenForDatabase(player_id, token).
 	print("Distribute token: ", token)

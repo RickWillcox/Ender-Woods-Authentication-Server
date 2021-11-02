@@ -6,6 +6,7 @@ var port = 1911
 var hashed_password
 var auth_hashed_password
 var salt
+var gateway_server_list = []
 
 func _ready():
 	PlayerData.dbConnect()
@@ -22,11 +23,15 @@ func StartServer():
 
 func _Peer_Connected(gateway_id):
 	print("Gateway " + str(gateway_id) + " Connected")
+	gateway_server_list.append(str(gateway_id))
+	print(gateway_server_list)
 		
 func _Peer_Disconnected(gateway_id):
 	print("Gateway " + str(gateway_id) + " Disconnected")
-
-remote func AuthenticatePlayer(username, password, player_id):
+	gateway_server_list.erase(str(gateway_id))
+	print(gateway_server_list)
+	
+remote func AuthenticatePlayer(username, password, player_id, world_to_connect_to):
 	print(password)
 	PlayerData.dbRefreshPlayerIDs()	
 	var token
@@ -65,7 +70,7 @@ remote func AuthenticatePlayer(username, password, player_id):
 			var timestamp = str(OS.get_unix_time())
 			token = hashed + timestamp
 			var gameserver = "GameServer1"
-			GameServers.DistributeLoginToken(token, gameserver)
+			GameServers.DistributeLoginToken(token, gameserver, world_to_connect_to)
 			
 			PlayerData.dbAddAuthToken(username, token)
 		
@@ -106,3 +111,5 @@ func GenerateHashedPassword(password, salt):
 		rounds -= 1
 	print("Hashing took: " + str((OS.get_system_time_msecs() - start_time)) + "ms")
 	return hashed_password
+
+
