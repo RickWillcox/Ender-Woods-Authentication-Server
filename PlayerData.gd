@@ -112,11 +112,8 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 			return [res1, res2]
 	#add failed to swap code here (invalid swap)
 
-func dbGetAllItemsInDatabase():
-	res1 = db.query("SELECT * FROM items")
-	res2 = db.query("SELECT * FROM itemcategories")
-	res3 = db.query("SELECT * FROM equipslots")
-	GameServers.SendAllItemDataToWorldServers(res1, res2, res3)
+func dbGetAllItemsInDatabase() -> Array:
+	return db.query("SELECT * FROM items")
 
 ########### Helper Functions ##############
 func dbReturnAccountData(session_token):
