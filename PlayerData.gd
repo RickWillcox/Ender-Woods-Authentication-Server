@@ -18,9 +18,23 @@ func _ready():
 func dbCreateAccount(username, password, salt, test_case):
 	print("Attempting to create account")
 	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
-	if res == OK and not test_case:
-		dbAddItemSlots(username)
-		pass
+	if res == OK:
+		var account_id = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
+		# add all basic items into players backpack
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 10, 1])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 11, 2])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 12, 3])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 13, 4])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 14, 5])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 15, 6])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 16, 7])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 17, 8])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 18, 9])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 19, 10])
+		
+		# some duplicates for testing
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 20, 2])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 21, 3])
 	dbReportError(res)
 	return res
 
@@ -69,12 +83,6 @@ func dbGetInventory(session_token, world_server_id):
 		inventory.append([res[i]["item_slot"], res[i]["item_id"]])
 	print(inventory)
 	return [inventory, world_server_id]
-	
-func dbAddItemSlots(username):
-	var acc_id = int(dbReturnAccountIDUsingUsername(username)[0]["account_id"])
-	for i in range(1, 36):
-			res = db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES ('%d', '%d', %s);" % [acc_id, i, 0])
-	return res
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
