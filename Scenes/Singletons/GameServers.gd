@@ -52,9 +52,15 @@ func SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token
 	rpc_id(world_server_id, "ReceivePlayerInventory", inventory_data, session_token)
 
 remote func GetAllItemsFromDatabase():
-	PlayerData.dbGetAllItemsInDatabase()
+	var res = PlayerData.dbGetAllItemsInDatabase()
+	# Rearrange item data as a dictionary so that Client and WorldServer can easily get item data using item_id
+	var item_db = {}
+	for row in res:
+		item_db[int(row.item_id)] = row
+	SendAllItemDataToWorldServers(item_db)
 
-func SendAllItemDataToWorldServers(all_item_data, item_categories_data, equip_slots_data):
-	rpc_id(0, "ReceiveItemData", all_item_data, item_categories_data, equip_slots_data)
+func SendAllItemDataToWorldServers(all_item_data):
+	print(all_item_data)
+	rpc_id(0, "ReceiveItemData", all_item_data)
 	
 
