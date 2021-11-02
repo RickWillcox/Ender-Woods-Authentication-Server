@@ -8,8 +8,7 @@ var auth_hashed_password
 var salt
 
 func _ready():
-	PlayerData.dbConnect()
-	PlayerData.dbRefreshPlayerIDs()
+	OS.set_window_position(Vector2(0,0))
 	StartServer()
 		
 func StartServer():
@@ -59,14 +58,9 @@ remote func AuthenticatePlayer(username, password, player_id):
 			result = true
 			
 			randomize()
-			####OR token = str(randi()).sha256_text() + str(OS.get_unix_time())
-			var random_number = randi()
-			var hashed = str(random_number).sha256_text()
-			var timestamp = str(OS.get_unix_time())
-			token = hashed + timestamp
+			token = str(randi()).sha256_text() + str(OS.get_unix_time())
 			var gameserver = "GameServer1"
 			GameServers.DistributeLoginToken(token, gameserver)
-			
 			PlayerData.dbAddAuthToken(username, token)
 		
 		
@@ -75,6 +69,7 @@ remote func AuthenticatePlayer(username, password, player_id):
 	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
 
 remote func CreateAccount(username, password, player_id):
+
 	PlayerData.dbRefreshPlayerIDs()	
 	var gateway_id = get_tree().get_rpc_sender_id()
 	var result
@@ -88,7 +83,7 @@ remote func CreateAccount(username, password, player_id):
 		message = 3
 		var salt = GenerateSalt()
 		var hashed_password = GenerateHashedPassword(password, salt)
-		PlayerData.dbCreateAccount(username, hashed_password, salt)
+		PlayerData.dbCreateAccount(username, hashed_password, salt, false)
 
 	rpc_id(gateway_id, "CreateAccountResults", result, player_id, message)
 

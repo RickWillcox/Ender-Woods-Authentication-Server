@@ -17,6 +17,8 @@ config/windows_native_icon="res://assets/a.ico"
 
 [autoload]
 
+DatabaseConnection="*res://Scenes/Singletons/DatabaseConnection.gd"
+ItemCategories="*res://ItemCategories.gd"
 PlayerData="*res://PlayerData.gd"
 GameServers="*res://Scenes/Singletons/GameServers.gd"
 Inventory="*res://Inventory.gd"
