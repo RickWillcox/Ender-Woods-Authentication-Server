@@ -21,6 +21,10 @@ PlayerData="*res://PlayerData.gd"
 GameServers="*res://Scenes/Singletons/GameServers.gd"
 Inventory="*res://Inventory.gd"
 
+[display]
+
+window/size/borderless=true
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/port/plugin.cfg" )
@@ -28,6 +32,7 @@ enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/g
 [global]
 
 plug=false
+window=false
 
 [physics]
 
