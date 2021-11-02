@@ -112,4 +112,3 @@ func GenerateHashedPassword(password, salt):
 	print("Hashing took: " + str((OS.get_system_time_msecs() - start_time)) + "ms")
 	return hashed_password
 
-
