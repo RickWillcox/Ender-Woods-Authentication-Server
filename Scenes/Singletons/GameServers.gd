@@ -61,6 +61,8 @@ remote func GetAllItemsFromDatabase():
 
 func SendAllItemDataToWorldServers(all_item_data):
 	print(all_item_data)
-	rpc_id(0, "ReceiveItemData", all_item_data)
-	
+	rpc_id(0, "ReceiveItemData", all_item_data)	
 
+remote func update_inventory(session_token, inventory):
+	print(["Update new inventory: ", inventory])
+	PlayerData.db_update_inventory(session_token, inventory)
