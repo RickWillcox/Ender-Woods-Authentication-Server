@@ -11,7 +11,7 @@ func dbConnect():
 		print("Failed to connect to the database")
 		return
 	print("Connected\n")
-
+	
 func _ready():
 	dbConnect()
 	
