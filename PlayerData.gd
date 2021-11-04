@@ -60,7 +60,7 @@ func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 	if res == OK and not test_case:
-		var inventory_data = dbGetInventory(session_token, world_server_id)
+		var inventory_data = dbGetInventory(session_token)
 		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
 	else:
@@ -75,14 +75,15 @@ func dbAddWorldServerID(session_token, world_server_id):
 	
 ########### Inventory ##############
 
-func dbGetInventory(session_token, world_server_id):
+func dbGetInventory(session_token):
 	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
-	var inventory = []
+	# Rearrange inventory as a dictionary
+	var inventory = {}
 	res = db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id])
 	for i in range(res.size()):
-		inventory.append([res[i]["item_slot"], res[i]["item_id"]])
+		inventory[int(res[i]["item_slot"])] = { "item_id": int(res[i]["item_id"])}
 	print(inventory)
-	return [inventory, world_server_id]
+	return inventory
 
 func dbAddNewItem(session_token, item_id):
 	var acc_id = dbGetAccountID(session_token)
@@ -94,7 +95,7 @@ func dbAddNewItem(session_token, item_id):
 		return 
 	#res[0] is the first non occupied item slot
 	var first_free_slot = int(res[0]["item_slot"])
-	if ItemCategories.ItemAllowedInSlot(first_free_slot, item_category):
+	if true: # TODO: ItemCategories.ItemAllowedInSlot(first_free_slot, item_category):
 		return db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
 		
 
@@ -105,8 +106,8 @@ func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
 	print(acc_id)
 	var item_a = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, old_slot_number])[0]["item_id"]
 	var item_b = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, new_slot_number])[0]["item_id"]
-	if ItemCategories.ItemAllowedInSlot(old_slot_number, item_b):
-		if ItemCategories.ItemAllowedInSlot(new_slot_number, item_a):
+	if true: # TODO: ItemCategories.ItemAllowedInSlot(old_slot_number, item_b):
+		if true: # TODO: ItemCategories.ItemAllowedInSlot(new_slot_number, item_a):
 			res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
 			res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
 			return [res1, res2]
@@ -156,3 +157,11 @@ func dbCheckSessionTokenExists(session_token):
 		if id["session_token"] == str(session_token):
 			return true
 	return false
+
+func db_update_inventory(session_token : int, new_inventory : Dictionary):
+	var account_id = dbGetAccountID(session_token)
+	# This currently does no validation on the inventory sent from WorldServer
+	db.query("DELETE FROM playerinventories WHERE account_id=%s" % account_id)
+	for slot in new_inventory.keys():
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" \
+			% [account_id, slot, new_inventory[slot]["item_id"]])

@@ -31,7 +31,6 @@ func test_Account():
 	subtext_ChangeItemSlot()
 	subtest_AddWorldServerID()
 	subtest_DeleteAccount()
-	subtext_ItemAllowedInSlot()
 
 
 ########### Account Tests ##############
@@ -70,14 +69,7 @@ func subtest_AddNewItem():
 func subtext_ChangeItemSlot():
 	res = PlayerData.dbChangeItemSlot(test_session_token, 1, 2)
 	assert_eq(0, res[0], "Add Item Slots 1")
-	assert_eq(0, res[1], "Add Item Slots 2")
-			
-func subtext_ItemAllowedInSlot(): #item_slot > item_id
-	assert_true(ItemCategories.ItemAllowedInSlot(1, 8), "Valid: item 8 into slot 1")
-	assert_true(ItemCategories.ItemAllowedInSlot(26, 1), "Valid: item 1 into slot 26")
-	assert_false(ItemCategories.ItemAllowedInSlot(29, 9), "INVALID: item 9 into slot 29")
-	assert_false(ItemCategories.ItemAllowedInSlot(29, 9), "INVALID: item 4 into slot 35")
-	
+	assert_eq(0, res[1], "Add Item Slots 2")	
 	
 #Function to generate a random string of characters for testing purposes	
 func generate_word(chars, length):
