@@ -7,7 +7,7 @@ var res
 var res1
 var res2
 var res3
-var db
+var db : MariaDB
 
 func _ready():
 	db = DatabaseConnection.db
@@ -165,3 +165,17 @@ func db_update_inventory(session_token : int, new_inventory : Dictionary):
 	for slot in new_inventory.keys():
 		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" \
 			% [account_id, slot, new_inventory[slot]["item_id"]])
+
+func db_add_item(id : int, item_name : String, consumable : int, attack : int,
+		defense : int, file_name : String, item_category : int, stack_size : int):
+	var query_s = "INSERT INTO items VALUES (%d, '%s', %d, %d, %d, '%s', %d, %d);" % \
+						[id, item_name, consumable, attack, defense, file_name, item_category, stack_size]
+	var res = db.query(query_s)
+	print(query_s)
+	dbReportError(res)
+	assert(res == OK)
+
+func db_clear_items():
+	var res = db.query("DELETE FROM items;")
+	dbReportError(res)
+	assert(res == OK)

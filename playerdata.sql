@@ -13,6 +13,7 @@ CREATE TABLE `items` (
   `defence` int(11) DEFAULT NULL,
   `file_name` varchar(100) DEFAULT NULL,
   `item_category` INT(11) NOT NULL,
+  `stack_size` INT(11) DEFAULT 1,
   PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=LATIN1;
 
@@ -39,17 +40,6 @@ DROP TABLE IF EXISTS `playerinventories`;
 CREATE TABLE `playerinventories` (
   `account_id` int(11) NOT NULL,
   `item_slot` int(11) NOT NULL,
-  `item_id` int(11) DEFAULT NULL
+  `item_id` int(11) DEFAULT NULL,
+  `amount` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=LATIN1;
-
-INSERT INTO items (item_id, item_name,consumable,attack,defence,file_name,item_category) VALUES
-     (1, 'silver_helmet',0,0,5,'1_silver_helmet.png', 1),
-     (2, 'silver_chest',0,0,10,'2_silver_chest.png',2),
-     (3, 'silver_gloves',0,4,2,'3_silver_gloves.png', 3),
-     (4, 'Silver_leggings',0,0,8,'4_silver_leggings.png',4),
-     (5, 'silver_boots',0,2,2,'5_silver_boots.png',5),
-     (6, 'silver_sword',0,10,0,'6_silver_sword.png',6),
-     (7, 'silver_shield',0,0,10,'7_silver_shield.png',7),
-     (8, 'gold_ring',0,4,4,'8_gold_ring.png',8),
-     (9, 'diamond_ring',0,6,6,'9_diamond_ring.png',8),
-     (10, 'gold_amulet',0,5,5,'10_gold_amulet.png',9);

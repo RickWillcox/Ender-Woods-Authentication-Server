@@ -9,6 +9,12 @@ var salt
 
 func _ready():
 	OS.set_window_position(Vector2(0,0))
+	
+	# Generate item database
+	$ItemDatabaseGenerator.generate_item_database()
+	# free memory used by the script
+	$ItemDatabaseGenerator.queue_free()
+	
 	StartServer()
 		
 func StartServer():
