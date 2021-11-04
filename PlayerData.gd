@@ -11,12 +11,11 @@ var db
 
 func _ready():
 	db = DatabaseConnection.db
-	res = db.query("SELECT * FROM playeraccounts;")
-	print(res)
+	print(db.query("SHOW TABLES;"))
 ########### Account Functions ##############
 
 func dbCreateAccount(username, password, salt, test_case):
-	print("Attempting to create account")
+	print("Attempting to create account: Username: %s | Password: %s, | Salt: %s" % [username, password.left(5), salt.left(5)])
 	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
 	if res == OK:
 		var account_id = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
@@ -39,7 +38,7 @@ func dbCreateAccount(username, password, salt, test_case):
 	return res
 
 func dbDeleteAccount(session_token, username, password, salt):
-	print("Attempting to delete account")
+	print("Attempting to delete account: Username: %s | Password: %s, | Salt: %s" % [username, password.left(5), salt.left(5)])
 	var user_data = dbReturnAccountData(session_token)
 	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
 		var acc_id = int(user_data[0]["account_id"])
@@ -51,15 +50,18 @@ func dbDeleteAccount(session_token, username, password, salt):
 	return res
 
 func dbAddAuthToken(username, auth_token):
+	print("Adding Auth token: Username: %s | Auth Token: %s" % [username, auth_token.left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
 	dbReportError(res)
 	return res
 
 func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
 	#player_ID becomes session_token here
+	print("Adding Session token: Session Token: %s | Auth Token: %s " % [session_token.left(10), auth_token.left(5)])
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 	if res == OK and not test_case:
+		print("Session Token Addition Successful Sending Inventory Data to World server for Session Token: %s" % [session_token.left(10)])
 		var inventory_data = dbGetInventory(session_token)
 		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
@@ -98,21 +100,6 @@ func dbAddNewItem(session_token, item_id):
 	if true: # TODO: ItemCategories.ItemAllowedInSlot(first_free_slot, item_category):
 		return db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
 		
-
-func dbChangeItemSlot(session_token, old_slot_number, new_slot_number):
-	#change this later with better swap query
-	#you are always holding item a and swapping to item b
-	var acc_id = dbGetAccountID(session_token)
-	print(acc_id)
-	var item_a = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, old_slot_number])[0]["item_id"]
-	var item_b = db.query("SELECT item_id FROM playerinventories WHERE account_id = %d AND item_slot = %d;" % [acc_id, new_slot_number])[0]["item_id"]
-	if true: # TODO: ItemCategories.ItemAllowedInSlot(old_slot_number, item_b):
-		if true: # TODO: ItemCategories.ItemAllowedInSlot(new_slot_number, item_a):
-			res1 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_a, new_slot_number])
-			res2 = db.query("UPDATE playerinventories SET item_id = %s WHERE item_slot = %d" % [item_b, old_slot_number])
-			return [res1, res2]
-	#add failed to swap code here (invalid swap)
-
 func dbGetAllItemsInDatabase() -> Array:
 	return db.query("SELECT * FROM items")
 
