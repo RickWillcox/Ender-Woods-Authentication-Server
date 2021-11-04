@@ -26,8 +26,6 @@ func test_Account():
 	subtest_CreateAccount()
 	subtest_AddAuthToken()
 	subtest_AddSessionToken()
-	subtest_AddItemSlots()
-	subtest_AddNewItem()
 	subtest_AddWorldServerID()
 	subtest_DeleteAccount()
 
@@ -55,15 +53,7 @@ func subtest_DeleteAccount():
 
 ########### Item / Inventory Tests ##############
 
-func subtest_AddItemSlots():
-	res = PlayerData.dbAddItemSlots(test_username)
-	assert_eq(0, res, "Add Item Slots")
-
-func subtest_AddNewItem():
-	for i in range(25):
-		var random_item_id : int = randi() % 9 + 1
-		res = PlayerData.dbAddNewItem(test_session_token, random_item_id)
-	assert_eq(0, res, "Add New item")
+#all removed due to not being used anymore
 		
 #Function to generate a random string of characters for testing purposes	
 func generate_word(chars, length):

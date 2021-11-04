@@ -15,7 +15,7 @@ func _ready():
 ########### Account Functions ##############
 
 func dbCreateAccount(username, password, salt, test_case):
-	print("Attempting to create account: Username: %s | Password: %s, | Salt: %s" % [username, password.left(5), salt.left(5)])
+	print("Attempting to create account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
 	if res == OK:
 		var account_id = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
@@ -38,7 +38,7 @@ func dbCreateAccount(username, password, salt, test_case):
 	return res
 
 func dbDeleteAccount(session_token, username, password, salt):
-	print("Attempting to delete account: Username: %s | Password: %s, | Salt: %s" % [username, password.left(5), salt.left(5)])
+	print("Attempting to delete account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	var user_data = dbReturnAccountData(session_token)
 	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
 		var acc_id = int(user_data[0]["account_id"])
@@ -50,18 +50,18 @@ func dbDeleteAccount(session_token, username, password, salt):
 	return res
 
 func dbAddAuthToken(username, auth_token):
-	print("Adding Auth token: Username: %s | Auth Token: %s" % [username, auth_token.left(10)])
+	print("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
 	dbReportError(res)
 	return res
 
 func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
 	#player_ID becomes session_token here
-	print("Adding Session token: Session Token: %s | Auth Token: %s " % [session_token.left(10), auth_token.left(5)])
+	print("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 	if res == OK and not test_case:
-		print("Session Token Addition Successful Sending Inventory Data to World server for Session Token: %s" % [session_token.left(10)])
+		print("Session Token Addition Successful Sending Inventory Data to World server for Session Token{10}: %s \n" % [str(session_token).left(10)])
 		var inventory_data = dbGetInventory(session_token)
 		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
@@ -86,19 +86,6 @@ func dbGetInventory(session_token):
 		inventory[int(res[i]["item_slot"])] = { "item_id": int(res[i]["item_id"])}
 	print(inventory)
 	return inventory
-
-func dbAddNewItem(session_token, item_id):
-	var acc_id = dbGetAccountID(session_token)
-	res = (db.query("SELECT item_category_id FROM items WHERE item_id = %d" % [item_id]))[0]["item_category_id"]
-	var item_category = res
-	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d AND item_id = 0 AND item_slot < 26" % [acc_id])
-	if res == null:
-		print("Inventory is Full")
-		return 
-	#res[0] is the first non occupied item slot
-	var first_free_slot = int(res[0]["item_slot"])
-	if true: # TODO: ItemCategories.ItemAllowedInSlot(first_free_slot, item_category):
-		return db.query("UPDATE playerinventories SET item_id = %d WHERE account_id = %d and item_slot = %d" % [item_id, acc_id, first_free_slot])
 		
 func dbGetAllItemsInDatabase() -> Array:
 	return db.query("SELECT * FROM items")
@@ -125,7 +112,7 @@ func dbRefreshPlayerIDs():
 
 func dbReportError(err):
 	if err != 0:
-		print("Error: ", err)
+		print("Error: ", err, "\n")
 		return
 
 func dbGetAccountID(session_token):

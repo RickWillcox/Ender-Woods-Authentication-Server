@@ -61,17 +61,17 @@ remote func AuthenticatePlayer(username, password, player_id):
 			PlayerData.dbAddAuthToken(username, token)
 		
 	
-	print("Authentication result sent to gateway | Result: %s | Username %s" % [result, username])
+	print("Authentication result sent to gateway | Result: %s | Username %s\n" % [result, username])
 	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
 
 remote func CreateAccount(username, password, player_id):
-	print("Create Account Request: User: %s" % [username])
+	print("Create Account Request: User: %s\n" % [username])
 	PlayerData.dbRefreshPlayerIDs()	
 	var gateway_id = get_tree().get_rpc_sender_id()
 	var result
 	var message
 	if PlayerData.dbCheckUniqueUsername(username)[0] == true:
-		print("Failed to create account username '%s' already exists!" % [username])
+		print("Failed to create account username '%s' already exists!\n" % [username])
 		result = false
 		message = 2
 	else:
@@ -96,5 +96,5 @@ func GenerateHashedPassword(password, salt):
 	while rounds > 0:
 		hashed_password = (hashed_password + salt).sha256_text()
 		rounds -= 1
-	print("Hashing took: " + str((OS.get_system_time_msecs() - start_time)) + "ms")
+	print("Hashing took: " + str((OS.get_system_time_msecs() - start_time)) + "ms\n")
 	return hashed_password

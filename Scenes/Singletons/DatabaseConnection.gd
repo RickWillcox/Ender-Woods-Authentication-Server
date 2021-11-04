@@ -5,8 +5,8 @@ var res
 var ip : String = "127.0.0.1"
 var port : int = 3306
 var database : String = "playerdata"
-var user : String = "admin"
-var password : String = "ender"
+var user : String = "root"
+var password : String = "rootroot"
 
 
 func dbConnect():
