@@ -81,9 +81,10 @@ func dbGetInventory(session_token):
 	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
 	# Rearrange inventory as a dictionary
 	var inventory = {}
-	res = db.query("SELECT item_slot, item_id FROM playerinventories WHERE account_id = %d" % [acc_id])
+	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d" % [acc_id])
 	for i in range(res.size()):
-		inventory[int(res[i]["item_slot"])] = { "item_id": int(res[i]["item_id"])}
+		inventory[int(res[i]["item_slot"])] = { "item_id": int(res[i]["item_id"]), 
+												"amount" : int(res[i]["amount"])}
 	print(inventory)
 	return inventory
 		
@@ -137,5 +138,12 @@ func db_update_inventory(session_token : int, new_inventory : Dictionary):
 	# This currently does no validation on the inventory sent from WorldServer
 	db.query("DELETE FROM playerinventories WHERE account_id=%s" % account_id)
 	for slot in new_inventory.keys():
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" \
-			% [account_id, slot, new_inventory[slot]["item_id"]])
+		
+		# Gracefully handle invalid number of items sent by world. Remove when
+		# World implements item stacking
+		var amount = 1
+		if new_inventory[slot].has("amount"):
+			amount = new_inventory[slot]["amount"]
+			
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" \
+			% [account_id, slot, new_inventory[slot]["item_id"], amount])
