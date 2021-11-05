@@ -43,3 +43,14 @@ CREATE TABLE `playerinventories` (
   `item_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=LATIN1;
+
+
+-- playerdata.reciepes definition
+DROP TABLE IF EXISTS `recipes`;
+CREATE TABLE `recipes` (
+  `recipe_id` INT(11) NOT NULL,
+  `recipe_type` INT(11) NOT NULL,
+  `required_level` INT(11) NOT NULL,
+  `materials` TEXT NOT NULL,
+  `result_item_id` INT(11) NOT NULL
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
