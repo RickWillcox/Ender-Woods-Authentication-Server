@@ -34,6 +34,13 @@ func dbCreateAccount(username, password, salt, test_case):
 		# some duplicates for testing
 		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 20, 2])
 		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 21, 3])
+		
+		# add four stacks of copper ore for testing
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 25, 100000, 15])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 26, 100000, 15])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 27, 100000, 1])
+		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 28, 100000, 6])
+		
 	dbReportError(res)
 	return res
 
