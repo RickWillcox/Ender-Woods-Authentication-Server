@@ -1,4 +1,5 @@
 extends Node
+class_name ItemDatabaseGenerator
 
 enum { NON_CONSUMABLE = 0, CONSUMABLE}
 enum Category {NOT_EQUIPPABLE = 0, HEAD, CHEST, HANDS, LEGS, FEET, MAIN_HAND, OFF_HAND, RING, AMULET}
@@ -24,7 +25,12 @@ enum MaterialItemIds { COPPER_ORE = FIRST_MATERIAL_ITEM_ID,
 						IRON_ORE,
 						COAL,
 						SILVER_ORE,
-						GOLD_ORE}
+						GOLD_ORE,
+						COPPER_BAR,
+						BRONZE_BAR,
+						IRON_BAR,
+						SILVER_BAR,
+						GOLD_BAR}
 
 class Item:
 	var id : int
@@ -51,10 +57,15 @@ class Item:
 		var _item_name = (MaterialItemIds.keys()[_id - FIRST_MATERIAL_ITEM_ID] as String).to_lower()
 		return Item.new(_id, _item_name, 0, 0, Category.NOT_EQUIPPABLE, _stack_size)
 	func save():
-		PlayerData.db_add_item(id, item_name, consumable, attack, defense, file_name, item_category, stack_size)
+		var db : MariaDB = DatabaseConnection.db
+		var query_s = "INSERT INTO items VALUES (%d, '%s', %d, %d, %d, '%s', %d, %d);" % \
+						[id, item_name, consumable, attack, defense, file_name, item_category, stack_size]
+		var res = db.query(query_s)
+		print(query_s)
+		assert(res == OK)
 
 func generate_item_database():
-	PlayerData.db_clear_items()
+	db_clear_items()
 	
 	var items = []
 	# Equippable items
@@ -79,6 +90,65 @@ func generate_item_database():
 	items.append(Item.new_material(MaterialItemIds.SILVER_ORE, 20))
 	items.append(Item.new_material(MaterialItemIds.GOLD_ORE, 20))
 	
+	items.append(Item.new_material(MaterialItemIds.COPPER_BAR, 20))
+	items.append(Item.new_material(MaterialItemIds.BRONZE_BAR, 20))
+	items.append(Item.new_material(MaterialItemIds.IRON_BAR, 20))
+	items.append(Item.new_material(MaterialItemIds.SILVER_BAR, 20))
+	items.append(Item.new_material(MaterialItemIds.GOLD_BAR, 20))
+	
 	# save items into database
 	for item in items:
 		(item as Item).save()
+		
+enum RecipeType { SMELTING, BLACKSMITHING }
+enum RecipeId { SMELT_COPPER,
+				SMELT_BRONZE,
+				SMELT_IRON
+				SMELT_SILVER,
+				SMELT_GOLD }
+
+class Recipe:
+	var id : int
+	var type : int
+	var required_level : int
+	var materials : String
+	var result_item_id : int
+	func _init(_id : int, _type : int, _required_level : int, _materials : Dictionary, _result_item_id : int):
+		id = _id
+		type = _type
+		required_level = required_level
+		materials = JSON.print(_materials)
+		result_item_id = _result_item_id
+	static func new_smelting(_id : int, _required_level : int, _materials : Dictionary, _result_item_id : int):
+		return Recipe.new(_id, RecipeType.SMELTING, _required_level, _materials, _result_item_id)
+	func save():
+		var db : MariaDB = DatabaseConnection.db
+		var query_s = "INSERT INTO recipes VALUES (%d, %d, %d, '%s', %d);" % \
+				[id, type, required_level, materials, result_item_id]
+		var res = db.query(query_s)
+		print(query_s)
+		assert(res == OK)
+
+func generate_recipe_database():
+	db_clear_recipes()
+	var recipes = []
+	
+	recipes.append(Recipe.new_smelting(RecipeId.SMELT_COPPER, 0, { MaterialItemIds.COPPER_ORE: 2 }, MaterialItemIds.COPPER_BAR))
+	recipes.append(Recipe.new_smelting(RecipeId.SMELT_BRONZE, 0, { MaterialItemIds.COPPER_ORE: 1, MaterialItemIds.TIN_ORE: 1 }, MaterialItemIds.BRONZE_BAR))
+	recipes.append(Recipe.new_smelting(RecipeId.SMELT_IRON, 0, { MaterialItemIds.IRON_ORE: 2, MaterialItemIds.COAL : 1 }, MaterialItemIds.IRON_BAR))
+	recipes.append(Recipe.new_smelting(RecipeId.SMELT_SILVER, 0, { MaterialItemIds.SILVER_ORE: 2, MaterialItemIds.COAL : 1 }, MaterialItemIds.SILVER_BAR))
+	recipes.append(Recipe.new_smelting(RecipeId.SMELT_GOLD, 0, { MaterialItemIds.GOLD_ORE: 2, MaterialItemIds.COAL : 1 }, MaterialItemIds.GOLD_BAR))
+	
+	for recipe in recipes:
+		(recipe as Recipe).save()
+
+# Helper functions
+func db_clear_items():
+	var db : MariaDB = DatabaseConnection.db
+	var res = db.query("DELETE FROM items;")
+	assert(res == OK)
+
+func db_clear_recipes():
+	var db : MariaDB = DatabaseConnection.db
+	var res = db.query("DELETE FROM recipes;")
+	assert(res == OK)

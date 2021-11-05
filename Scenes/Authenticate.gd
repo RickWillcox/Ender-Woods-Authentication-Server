@@ -11,6 +11,7 @@ func _ready():
 	
 	# Generate item database
 	$ItemDatabaseGenerator.generate_item_database()
+	$ItemDatabaseGenerator.generate_recipe_database()
 	# free memory used by the script
 	$ItemDatabaseGenerator.queue_free()
 	
