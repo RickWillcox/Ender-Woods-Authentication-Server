@@ -37,7 +37,7 @@ You will now be able to run the Authentication Server like normal (play), and th
 ### Compiling binary from scratch
 
 1. Follow instructions on the [MariaDB plugin repo](https://github.com/sigrudds1/godot-mariadb)
-2. Choose platform Linux or Windows
+2. Choose platform Linux or Windows (using wsl)
 3. Run the following commands in the main godot folder cli (replace -j8, where 8 is how many cores your cpu has. eg: -j4 or -j16
 4. You will find the compiled binaries in the /godot/bin folder 
 
