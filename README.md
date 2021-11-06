@@ -25,7 +25,7 @@ When you run it for the first time it will be run as a service on start up in th
 
 ### Godot
 
-You must run the Authentication Server Project using 3.3.4MariaDB.exe
+You must run the Authentication Server Project using the compile binary for either windows of linux that contains mariadb
 
 1. Windows : https://drive.google.com/file/d/1mH3pn8u6pKX-WAhWdOSdqnqXhXDILuGj/view?usp=sharing
 2. Linux Debian : https://drive.google.com/file/d/12_q6vZ-_GF9WUuYmMDx0bFVG4sxBeK4T/view?usp=sharing
