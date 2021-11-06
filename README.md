@@ -33,3 +33,24 @@ You must run the Authentication Server Project using the compile binary for eith
 
 You will now be able to run the Authentication Server like normal (play), and then load up Gateway Server > World Server > Client and test the game.
 
+
+### Compiling binary from scratch
+
+1. Follow instructions on the [MariaDB plugin repo](https://github.com/sigrudds1/godot-mariadb)
+2. Choose platform Linux or Windows
+3. Run the following commands in the main godot folder cli (replace -j8, where 8 is how many cores your cpu has. eg: -j4 or -j16
+4. You will find the compiled binaries in the /godot/bin folder 
+
+#### Linux
+
+1. Editor : `scons -j8 platform=x11 tools=yes target=release_debug bits=64 use_lto=yes`
+2. Export Template debug: `scons -j8 platform=server tools=no target=release_debug bits=64 use_lto=yes`
+3. Export Template release: `scons -j18 platform=server tools=no target=release bits=64 use_lto=yes`
+
+#### Windows
+
+1. Editor : `scons -j8 platform=windows tools=yes target=release_debug bits=64 use_lto=yes`
+2. Export Template debug: `scons -j8 platform=windows tools=no target=release_debug bits=64 use_lto=yes`
+3. Export Template release: `scons -j8 platform=windows tools=no target=release bits=64 use_lto=yes`
+
+
