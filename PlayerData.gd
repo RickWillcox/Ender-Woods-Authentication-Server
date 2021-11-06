@@ -48,7 +48,7 @@ func dbDeleteAccount(session_token, username, password, salt):
 	print("Attempting to delete account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	var user_data = dbReturnAccountData(session_token)
 	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
-		var acc_id = int(user_data[0]["account_id"])
+		var acc_id = user_data[0]["account_id"]
 		#Delete Account and Inventory
 		res = db.query("""
 		DELETE FROM playeraccounts WHERE username = '%s'; 
@@ -85,13 +85,14 @@ func dbAddWorldServerID(session_token, world_server_id):
 ########### Inventory ##############
 
 func dbGetInventory(session_token):
-	var acc_id = int(dbReturnAccountData(session_token)[0]["account_id"])
+	var acc_id = dbReturnAccountData(session_token)[0]["account_id"]
 	# Rearrange inventory as a dictionary
 	var inventory = {}
 	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d" % [acc_id])
 	for i in range(res.size()):
-		inventory[int(res[i]["item_slot"])] = { "item_id": int(res[i]["item_id"]), 
-												"amount" : int(res[i]["amount"])}
+		var item_slot = res[i]["item_slot"]
+		res[i].erase("item_slot")
+		inventory[item_slot] = res[i]
 	print(inventory)
 	return inventory
 		
@@ -136,7 +137,7 @@ func dbCheckAuthTokenExists(auth_token):
 
 func dbCheckSessionTokenExists(session_token):
 	for id in PlayerIDs:
-		if id["session_token"] == str(session_token):
+		if id["session_token"] == session_token:
 			return true
 	return false
 
