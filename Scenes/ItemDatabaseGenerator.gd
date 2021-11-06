@@ -61,7 +61,6 @@ class Item:
 		var query_s = "INSERT INTO items VALUES (%d, '%s', %d, %d, %d, '%s', %d, %d);" % \
 						[id, item_name, consumable, attack, defense, file_name, item_category, stack_size]
 		var res = db.query(query_s)
-		print(query_s)
 		assert(res == OK)
 
 func generate_item_database():
@@ -126,7 +125,6 @@ class Recipe:
 		var query_s = "INSERT INTO recipes VALUES (%d, %d, %d, '%s', %d);" % \
 				[id, type, required_level, materials, result_item_id]
 		var res = db.query(query_s)
-		print(query_s)
 		assert(res == OK)
 
 func generate_recipe_database():
