@@ -1,6 +1,6 @@
 # Ender Woods Authentication Server
 
-## Installation
+## Installation Guide
 
 ### MariaDB
 
