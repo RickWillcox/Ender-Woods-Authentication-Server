@@ -33,6 +33,13 @@ DatabaseConnection="*res://Scenes/Singletons/DatabaseConnection.gd"
 PlayerData="*res://PlayerData.gd"
 GameServers="*res://Scenes/Singletons/GameServers.gd"
 
+[debug]
+
+gdscript/warnings/unassigned_variable=false
+gdscript/warnings/unused_variable=false
+gdscript/warnings/shadowed_variable=false
+gdscript/warnings/return_value_discarded=false
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/port/plugin.cfg" )
