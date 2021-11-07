@@ -27,6 +27,8 @@ config/windows_native_icon="res://assets/a.ico"
 
 [autoload]
 
+Logger="*res://common/logger/logger.gd"
+LoggerConfig="*res://Scenes/Singletons/LoggerConfig.gd"
 DatabaseConnection="*res://Scenes/Singletons/DatabaseConnection.gd"
 PlayerData="*res://PlayerData.gd"
 GameServers="*res://Scenes/Singletons/GameServers.gd"
