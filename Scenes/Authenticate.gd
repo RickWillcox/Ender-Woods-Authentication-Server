@@ -34,12 +34,12 @@ func _Peer_Disconnected(gateway_id):
 
 remote func AuthenticatePlayer(username, password, player_id):
 	PlayerData.dbRefreshPlayerIDs()	
-	var token
+	var token : String = "notoken"
 	Logger.info("Authentication request received: %s" % [username])
 	var gateway_id = get_tree().get_rpc_sender_id()
-	var result
+	var result : bool
 	var auth_player_data = PlayerData.dbCheckUniqueUsername(username)
-	var username_exists = auth_player_data[0]
+	var username_exists : bool = auth_player_data[0]
 	var db_player_username = auth_player_data[1]
 	var db_player_password = auth_player_data[2]
 	var db_salt = auth_player_data[3]
