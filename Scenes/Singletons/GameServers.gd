@@ -57,7 +57,7 @@ remote func GetAllItemsFromDatabase():
 	# Rearrange item data as a dictionary so that Client and WorldServer can easily get item data using item_id
 	var item_db = {}
 	for row in res:
-		item_db[int(row.item_id)] = row
+		item_db[row.item_id] = row
 	SendAllItemDataToWorldServers(item_db)
 
 func SendAllItemDataToWorldServers(all_item_data):
