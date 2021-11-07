@@ -47,7 +47,6 @@ remote func AuthenticatePlayer(username, password, player_id):
 	
 	if db_can_login == 0:
 		print("Username '%s' is banned\n" % [username])
-
 		result = false
 	elif username_exists == false:
 		Logger.info("Username '%s' not found" % [username])
