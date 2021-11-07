@@ -11,11 +11,11 @@ var db : MariaDB
 
 func _ready():
 	db = DatabaseConnection.db
-	print(db.query("SHOW TABLES;"))
+	Logger.info("Tables in database: " + str(db.query("SHOW TABLES;")))
 ########### Account Functions ##############
 
 func dbCreateAccount(username, password, salt, test_case):
-	print("Attempting to create account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
+	Logger.info("Attempting to create account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
 	if res == OK:
 		var account_id = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
@@ -45,7 +45,7 @@ func dbCreateAccount(username, password, salt, test_case):
 	return res
 
 func dbDeleteAccount(session_token, username, password, salt):
-	print("Attempting to delete account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
+	Logger.info("Attempting to delete account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	var user_data = dbReturnAccountData(session_token)
 	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
 		var acc_id = user_data[0]["account_id"]
@@ -57,18 +57,18 @@ func dbDeleteAccount(session_token, username, password, salt):
 	return res
 
 func dbAddAuthToken(username, auth_token):
-	print("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
+	Logger.info("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
 	dbReportError(res)
 	return res
 
 func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
 	#player_ID becomes session_token here
-	print("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
+	Logger.info("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
 	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
 	dbReportError(res)
 	if res == OK and not test_case:
-		print("Session Token Addition Successful Sending Inventory Data to World server for Session Token{10}: %s \n" % [str(session_token).left(10)])
+		Logger.info("Session Token Addition Successful Sending Inventory Data to World server for Session Token{10}: %s \n" % [str(session_token).left(10)])
 		var inventory_data = dbGetInventory(session_token)
 		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
 		pass
@@ -121,7 +121,7 @@ func dbRefreshPlayerIDs():
 
 func dbReportError(err):
 	if err != 0:
-		print("Error: ", err, "\n")
+		Logger.error("Error: " +  str(err))
 		return
 
 func dbGetAccountID(session_token):

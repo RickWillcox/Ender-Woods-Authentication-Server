@@ -11,12 +11,14 @@ var password : String = "rootroot"
 
 func dbConnect():
 	db = MariaDB.new()
-	print("Connecting to Database | IP: %s | port: %d | database: %s | user: %s | pass: %s \n" % [ip,port,database,user,password])
+	Logger.info("Connecting to Database | IP: %s | port: %d | database: %s | user: %s | pass: %s" % [ip,port,database,user,password])
 	res = db.connect_db(ip, port, database, user, password)
 	if res != OK:
-		print("Failed to connect to the database\n")
+		Logger.error("Failed to connect to the database")
+		# Server cannot start without database connection
+		assert(false)
 		return
-	print("Connected to '%s' database\n" % [database])
+	Logger.info("Connected to '%s' database" % [database])
 
 func _ready():
 	dbConnect()
