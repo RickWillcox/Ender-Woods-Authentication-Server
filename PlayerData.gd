@@ -1,6 +1,6 @@
 extends Node
 
-var PlayerIDs
+var PlayerIDs : Array
 
 #### Maria DB
 var res 
@@ -14,142 +14,126 @@ func _ready():
 	Logger.info("Tables in database: " + str(db.query("SHOW TABLES;")))
 ########### Account Functions ##############
 
-func dbCreateAccount(username, password, salt, test_case):
-	Logger.info("Attempting to create account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
+func db_create_account(username : String, password : String, salt : String):
+	Logger.info("Attempting to create account: username : String: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
 	if res == OK:
-		var account_id = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
+		var account_id : int = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
 		# add all basic items into players backpack
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 10, 1])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 11, 2])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 12, 3])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 13, 4])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 14, 5])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 15, 6])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 16, 7])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 17, 8])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 18, 9])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 19, 10])
+		var insert_query : String = "INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );"
+		db.query(insert_query % [account_id, 10, 1])
+		db.query(insert_query % [account_id, 11, 2])
+		db.query(insert_query % [account_id, 12, 3])
+		db.query(insert_query % [account_id, 13, 4])
+		db.query(insert_query % [account_id, 14, 5])
+		db.query(insert_query % [account_id, 15, 6])
+		db.query(insert_query % [account_id, 16, 7])
+		db.query(insert_query % [account_id, 17, 8])
+		db.query(insert_query % [account_id, 18, 9])
+		db.query(insert_query % [account_id, 19, 10])
 		
 		# some duplicates for testing
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 20, 2])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );" % [account_id, 21, 3])
 		
+		db.query(insert_query % [account_id, 20, 2])
+		db.query(insert_query % [account_id, 21, 3])
+		
+		var insert_testing : String = "INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );"
 		# add four stacks of copper ore for testing
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 25, 100000, 15])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 26, 100000, 15])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 27, 100000, 1])
-		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" % [account_id, 28, 100000, 6])
+		db.query(insert_testing % [account_id, 25, 100000, 15])
+		db.query(insert_testing % [account_id, 26, 100000, 15])
+		db.query(insert_testing % [account_id, 27, 100000, 1])
+		db.query(insert_testing % [account_id, 28, 100000, 6])
 		
-	dbReportError(res)
+	db_report_error(res)
 	return res
 
-func dbDeleteAccount(session_token, username, password, salt):
-	Logger.info("Attempting to delete account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
-	var user_data = dbReturnAccountData(session_token)
+func db_delete_account(session_token : int, username : String, password : String, salt : String):
+	Logger.info("Deleting account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
+	var user_data = db_return_account_data(session_token)
 	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
 		var acc_id = user_data[0]["account_id"]
 		#Delete Account and Inventory
 		res = db.query("""
 		DELETE FROM playeraccounts WHERE username = '%s'; 
 		DELETE FROM playerinventories WHERE account_id = '%d';""" % [username, acc_id])
-	dbReportError(res)
+	db_report_error(res)
 	return res
 
-func dbAddAuthToken(username, auth_token):
+func db_add_auth_token(username : String, auth_token : String):
 	Logger.info("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
-	dbReportError(res)
+	db_report_error(res)
 	return res
 
-func dbAddSessionToken(session_token, auth_token, world_server_id, test_case):
+func db_add_session_token(session_token : int, auth_token : String, world_server_id : int, test_case : bool):
 	#player_ID becomes session_token here
 	Logger.info("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
-	res = db.query("UPDATE playeraccounts SET session_token = '%s' WHERE auth_token = '%s';" % [session_token, auth_token])
-	dbReportError(res)
+	res = db.query("UPDATE playeraccounts SET session_token = '%d' WHERE auth_token = '%s';" % [session_token, auth_token])
+	db_report_error(res)
 	if res == OK and not test_case:
 		Logger.info("Session Token Addition Successful Sending Inventory Data to World server for Session Token{10}: %s \n" % [str(session_token).left(10)])
-		var inventory_data = dbGetInventory(session_token)
-		GameServers.SendUpdatedInventoryToClient(inventory_data, world_server_id, session_token)
+		var inventory_data = db_get_inventory(session_token)
+		GameServers.send_updated_inventory_to_client(inventory_data, world_server_id, session_token)
 		pass
 	else:
 		#Send failed to add session token code if needed
 		pass
 	return res
 
-func dbAddWorldServerID(session_token, world_server_id):
-	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %s" %[world_server_id, session_token])
-	dbReportError(res)
+func dbAddWorldServerID(session_token  : String, world_server_id : int):
+	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %d" %[world_server_id, session_token])
+	db_report_error(res)
 	return res
 	
 ########### Inventory ##############
 
-func dbGetInventory(session_token):
-	var acc_id = dbReturnAccountData(session_token)[0]["account_id"]
+func db_get_inventory(session_token : int):
+	var acc_id : int = db_return_account_data(session_token)[0]["account_id"]
 	# Rearrange inventory as a dictionary
-	var inventory = {}
+	var inventory : Dictionary = {}
 	res = db.query("SELECT * FROM playerinventories WHERE account_id = %d" % [acc_id])
 	for i in range(res.size()):
 		var item_slot = res[i]["item_slot"]
 		res[i].erase("item_slot")
 		inventory[item_slot] = res[i]
-	print(inventory)
 	return inventory
 		
-func dbGetAllItemsInDatabase() -> Array:
+func db_get_all_items_database() -> Array:
 	return db.query("SELECT * FROM items")
 
 ########### Helper Functions ##############
-func dbReturnAccountData(session_token):
-	return db.query("SELECT * FROM playeraccounts WHERE session_token = '%s'" % [session_token])
-
-func dbReturnAccountIDUsingUsername(username):
-	res = db.query("SELECT account_id FROM playeraccounts WHERE username = '%s'" % [username])
-	return res
+func db_return_account_data(session_token : int):
+	return db.query("SELECT * FROM playeraccounts WHERE session_token = '%d'" % [session_token])
 	
-func dbCheckUniqueUsername(username):
-	var res = [false, null, null, null, null]
+func db_check_unique_username(username : String):
+	var res : Array = [false, null, null, null, null]
 	for id in PlayerIDs:
 		if id["username"] == username:
 			res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
 			break
 	return res
 
-func dbRefreshPlayerIDs():
+func db_refresh_player_ids():
 	res = db.query("SELECT * FROM playeraccounts;")
 	PlayerIDs = res
 
-func dbReportError(err):
+func db_report_error(err):
 	if err != 0:
 		Logger.error("Error: " +  str(err))
 		return
 
-func dbGetAccountID(session_token):
-	return int(dbReturnAccountData(session_token)[0]["account_id"])
-
-###Functions only used for Testing
-	
-func dbCheckAuthTokenExists(auth_token):
-	for id in PlayerIDs:
-		if id["auth_token"] == auth_token:
-			return true
-	return false
-
-func dbCheckSessionTokenExists(session_token):
-	for id in PlayerIDs:
-		if id["session_token"] == session_token:
-			return true
-	return false
+func db_get_account_id(session_token : int):
+	return int(db_return_account_data(session_token)[0]["account_id"])
 
 func db_update_inventory(session_token : int, new_inventory : Dictionary):
-	var account_id = dbGetAccountID(session_token)
+	var account_id : int = db_get_account_id(session_token)
 	# This currently does no validation on the inventory sent from WorldServer
 	db.query("DELETE FROM playerinventories WHERE account_id=%s" % account_id)
 	for slot in new_inventory.keys():
 		
 		# Gracefully handle invalid number of items sent by world. Remove when
 		# World implements item stacking
-		var amount = 1
+		var amount : int = 1
 		if new_inventory[slot].has("amount"):
 			amount = new_inventory[slot]["amount"]
 			

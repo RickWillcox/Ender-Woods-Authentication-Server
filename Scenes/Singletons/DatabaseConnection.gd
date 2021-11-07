@@ -1,7 +1,7 @@
 extends Node
 
 var db: MariaDB
-var res 
+var res : int 
 var ip : String = "127.0.0.1"
 var port : int = 3306
 var database : String = "playerdata"
@@ -9,9 +9,9 @@ var user : String = "root"
 var password : String = "rootroot"
 
 
-func dbConnect():
+func db_connect():
 	db = MariaDB.new()
-	Logger.info("Connecting to Database | IP: %s | port: %d | database: %s | user: %s | pass: %s" % [ip,port,database,user,password])
+	Logger.info("Connecting to Database | IP: %s | Port: %d | Database: %s | User: %s | Pass: %s" % [ip, port, database, user, password])
 	res = db.connect_db(ip, port, database, user, password)
 	if res != OK:
 		Logger.error("Failed to connect to the database")
@@ -21,5 +21,5 @@ func dbConnect():
 	Logger.info("Connected to '%s' database" % [database])
 
 func _ready():
-	dbConnect()
+	db_connect()
 	

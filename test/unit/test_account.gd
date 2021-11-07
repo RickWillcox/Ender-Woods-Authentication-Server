@@ -20,7 +20,7 @@ func before_all():
 	test_session_token = generate_word(numbers, 10)
 	test_world_server_id = generate_word(numbers, 10)
 	db = DatabaseConnection.db
-	PlayerData.dbRefreshPlayerIDs()
+	PlayerData.db_refresh_player_ids()
 
 func test_Account():
 	subtest_CreateAccount()
@@ -32,15 +32,15 @@ func test_Account():
 
 ########### Account Tests ##############
 func subtest_CreateAccount():
-	res = PlayerData.dbCreateAccount(test_username, test_password, test_salt, true)
+	res = PlayerData.db_create_account(test_username, test_password, test_salt)
 	assert_eq(0, res, "Create Account")
 	
 func subtest_AddAuthToken():
-	res = PlayerData.dbAddAuthToken(test_username, test_auth_token)
+	res = PlayerData.db_add_auth_token(test_username, test_auth_token)
 	assert_eq(0, res, "Add Auth Token")
 
 func subtest_AddSessionToken():
-	res = PlayerData.dbAddSessionToken(test_session_token, test_auth_token, test_world_server_id, true)
+	res = PlayerData.db_add_session_token(test_session_token, test_auth_token, test_world_server_id, true)
 	assert_eq(0, res, "Add Session Token")
 
 func subtest_AddWorldServerID():
@@ -48,7 +48,7 @@ func subtest_AddWorldServerID():
 	assert_eq(0, res, "Add World Server ID")
 	
 func subtest_DeleteAccount():
-	res = PlayerData.dbDeleteAccount(test_session_token, test_username, test_password, test_salt)
+	res = PlayerData.db_delete_account(test_session_token, test_username, test_password, test_salt)
 	assert_eq(0, res, "Delete Account")
 
 ########### Item / Inventory Tests ##############
