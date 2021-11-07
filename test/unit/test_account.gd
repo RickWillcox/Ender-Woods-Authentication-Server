@@ -23,7 +23,7 @@ func before_all():
 	PlayerData.db_refresh_player_ids()
 
 func test_Account():
-	subtest_CreateAccount()
+	subtest_create_account()
 	subtest_AddAuthToken()
 	subtest_AddSessionToken()
 	subtest_AddWorldServerID()
@@ -31,7 +31,7 @@ func test_Account():
 
 
 ########### Account Tests ##############
-func subtest_CreateAccount():
+func subtest_create_account():
 	res = PlayerData.db_create_account(test_username, test_password, test_salt)
 	assert_eq(0, res, "Create Account")
 	

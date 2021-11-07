@@ -32,7 +32,7 @@ func _peer_connected(gateway_id : int):
 func _peer_disconnected(gateway_id : int):
 	Logger.info("Gateway %d Disconnected" % [gateway_id])
 
-remote func AuthenticatePlayer(username : String, password : String, player_id : int):
+remote func auththenicate_player(username : String, password : String, player_id : int):
 	PlayerData.db_refresh_player_ids()	
 	var token : String = "notoken"
 	Logger.info("Authentication request received: %s" % [username])
@@ -57,7 +57,7 @@ remote func AuthenticatePlayer(username : String, password : String, player_id :
 			Logger.warn("Incorrect password for username: %s" % [username])
 			result = false
 		else:
-			Logger.warn("Username and Password found in database for: %s" % [username])
+			Logger.info("Username and Password found in database for: %s" % [username])
 			result = true
 			randomize()
 			token = str(randi()).sha256_text() + str(OS.get_unix_time())
@@ -68,7 +68,7 @@ remote func AuthenticatePlayer(username : String, password : String, player_id :
 	Logger.info("Authentication result sent to gateway | Result: %s | Username %s" % [result, username])
 	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
 
-remote func CreateAccount(username : String, password : String, player_id : int):
+remote func create_account(username : String, password : String, player_id : int):
 	Logger.info("Create Account Request: User: %s" % [username])
 	PlayerData.db_refresh_player_ids()	
 	var gateway_id : int = get_tree().get_rpc_sender_id()
@@ -86,7 +86,7 @@ remote func CreateAccount(username : String, password : String, player_id : int)
 		PlayerData.db_create_account(username, hashed_password, salt)
 	
 	Logger.info("Create Account Result for Username: %s | Result: %s | Message: %d" %[username, result, message])
-	rpc_id(gateway_id, "CreateAccountResults", result, player_id, message)
+	rpc_id(gateway_id, "create_accountResults", result, player_id, message)
 
 func generate_salt():
 	randomize()

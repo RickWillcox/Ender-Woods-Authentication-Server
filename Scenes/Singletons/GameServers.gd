@@ -36,7 +36,7 @@ func _peer_disconnected(gameserver_id : int):
 	
 func distribute_login_token(token : String, gameserver : String, username : String):
 	var gameserver_peer_id : int = gameserverlist[gameserver]
-	rpc_id(gameserver_peer_id, "ReceiveLoginToken", token)
+	rpc_id(gameserver_peer_id, "receive_login_token", token)
 	#Store token alongside players account for reference after using remote func ReceivePlayerTokenForDatabase(player_id, token).
 	Logger.info("Distribute token: Username: %s | Token: %s| GameServer: %s" % [username, token, gameserver])
 
@@ -49,7 +49,7 @@ remote func ReceivePlayerTokenForDatabase(player_id : int, token : String):
 	PlayerData.db_add_session_token(player_id, token, world_server_id, false)
 	
 func send_updated_inventory_to_client(inventory_data : Dictionary, world_server_id : int, session_token : int):
-	rpc_id(world_server_id, "ReceivePlayerInventory", inventory_data, session_token)
+	rpc_id(world_server_id, "receive_player_inventory", inventory_data, session_token)
 
 remote func GetAllItemsFromDatabase():
 	var res : Array = PlayerData.db_get_all_items_database()
