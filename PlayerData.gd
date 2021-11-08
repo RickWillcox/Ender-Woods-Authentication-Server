@@ -80,7 +80,7 @@ func db_add_session_token(session_token : int, auth_token : String, world_server
 		pass
 	return res
 
-func dbAddWorldServerID(session_token  : String, world_server_id : int):
+func dbAddWorldServerID(session_token  : int, world_server_id : int):
 	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %d" %[world_server_id, session_token])
 	db_report_error(res)
 	return res

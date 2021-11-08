@@ -39,11 +39,11 @@ remote func auththenicate_player(username : String, password : String, player_id
 	var gateway_id : int = get_tree().get_rpc_sender_id()
 	var result : bool
 	var auth_player_data : Array = PlayerData.db_check_unique_username(username)
-	var username_exists : bool = auth_player_data[0]
-	var db_player_username : String = auth_player_data[1]
-	var db_player_password : String = auth_player_data[2]
-	var db_salt : String = auth_player_data[3]
-	var db_can_login : int = auth_player_data[4]
+	var username_exists = auth_player_data[0]
+	var db_player_username = auth_player_data[1]
+	var db_player_password = auth_player_data[2]
+	var db_salt = auth_player_data[3]
+	var db_can_login = auth_player_data[4]
 	
 	if db_can_login == 0:
 		Logger.info("Username '%s' is banned\n" % [username])
@@ -66,7 +66,7 @@ remote func auththenicate_player(username : String, password : String, player_id
 			PlayerData.db_add_auth_token(username, token)
 		
 	Logger.info("Authentication result sent to gateway | Result: %s | Username %s" % [result, username])
-	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
+	rpc_id(gateway_id, "authentication_results", result, player_id, token)
 
 remote func create_account(username : String, password : String, player_id : int):
 	Logger.info("Create Account Request: User: %s" % [username])
@@ -86,7 +86,7 @@ remote func create_account(username : String, password : String, player_id : int
 		PlayerData.db_create_account(username, hashed_password, salt)
 	
 	Logger.info("Create Account Result for Username: %s | Result: %s | Message: %d" %[username, result, message])
-	rpc_id(gateway_id, "create_accountResults", result, player_id, message)
+	rpc_id(gateway_id, "create_account_results", result, player_id, message)
 
 func generate_salt():
 	randomize()
