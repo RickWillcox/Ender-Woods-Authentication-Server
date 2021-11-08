@@ -2,12 +2,12 @@ extends "res://addons/gut/test.gd"
 
 var characters = 'abcdefghijklmnopqrstuvwxyz'
 var numbers = '0123456789'
-var test_username 
-var test_password 
-var test_salt 
-var test_auth_token 
-var test_session_token
-var test_world_server_id
+var test_username : String
+var test_password : String
+var test_salt : String 
+var test_auth_token : String
+var test_session_token : int
+var test_world_server_id : int
 var res
 var db
 
@@ -17,8 +17,8 @@ func before_all():
 	test_password = generate_word(characters, 25).sha256_text()
 	test_salt = generate_word(characters, 25).sha256_text()
 	test_auth_token = generate_word(characters, 25).sha256_text()
-	test_session_token = generate_word(numbers, 10)
-	test_world_server_id = generate_word(numbers, 10)
+	test_session_token = int(generate_word(numbers, 10))
+	test_world_server_id = int(generate_word(numbers, 10))
 	db = DatabaseConnection.db
 	PlayerData.db_refresh_player_ids()
 

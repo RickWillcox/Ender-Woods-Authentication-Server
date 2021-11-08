@@ -35,10 +35,13 @@ GameServers="*res://Scenes/Singletons/GameServers.gd"
 
 [debug]
 
+gdscript/warnings/enable=false
 gdscript/warnings/unassigned_variable=false
 gdscript/warnings/unused_variable=false
 gdscript/warnings/shadowed_variable=false
+gdscript/warnings/unused_signal=false
 gdscript/warnings/return_value_discarded=false
+gdscript/warnings/function_used_as_property=false
 
 [editor_plugins]
 
