@@ -86,7 +86,7 @@ remote func create_account(username : String, password : String, player_id : int
 		PlayerData.db_create_account(username, hashed_password, salt)
 	
 	Logger.info("Create Account Result for Username: %s | Result: %s | Message: %d" %[username, result, message])
-	rpc_id(gateway_id, "create_accountResults", result, player_id, message)
+	rpc_id(gateway_id, "create_account_results", result, player_id, message)
 
 func generate_salt():
 	randomize()
