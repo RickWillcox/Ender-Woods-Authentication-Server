@@ -66,7 +66,7 @@ remote func auththenicate_player(username : String, password : String, player_id
 			PlayerData.db_add_auth_token(username, token)
 		
 	Logger.info("Authentication result sent to gateway | Result: %s | Username %s" % [result, username])
-	rpc_id(gateway_id, "AuthenticationResults", result, player_id, token)
+	rpc_id(gateway_id, "authentication_results", result, player_id, token)
 
 remote func create_account(username : String, password : String, player_id : int):
 	Logger.info("Create Account Request: User: %s" % [username])
