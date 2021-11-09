@@ -44,7 +44,7 @@ remote func auththenicate_player(username : String, password : String, player_id
 	var db_player_password = auth_player_data[2]
 	var db_salt = auth_player_data[3]
 	var db_can_login = auth_player_data[4]
-	
+	print(auth_player_data)
 	if db_can_login == 0:
 		Logger.info("Username '%s' is banned\n" % [username])
 		result = false
@@ -74,7 +74,11 @@ remote func create_account(username : String, password : String, player_id : int
 	var gateway_id : int = get_tree().get_rpc_sender_id()
 	var result : bool
 	var message : int
-	if PlayerData.db_check_unique_username(username)[0] == true:
+	if username.length() > 25:
+		Logger.warn("Failed to create account username{5} '%s' is too long!" % [username.left(5)])
+		result = false
+		message = 1
+	elif PlayerData.db_check_unique_username(username)[0] == true:
 		Logger.warn("Failed to create account username '%s' already exists!" % [username])
 		result = false
 		message = 2

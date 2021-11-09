@@ -35,6 +35,10 @@ func _peer_disconnected(gameserver_id : int):
 	Logger.info("Game Server: %d Disconnected" % [gameserver_id])
 	
 func distribute_login_token(token : String, gameserver : String, username : String):
+#	if not gameserver in gameserverlist.values():
+#		#TODO reset buttons on client if this happens
+#		Logger.warn("World Server is not connected")
+#		return
 	var gameserver_peer_id : int = gameserverlist[gameserver]
 	rpc_id(gameserver_peer_id, "receive_login_token", token)
 	#Store token alongside players account for reference after using remote func ReceivePlayerTokenForDatabase(player_id, token).

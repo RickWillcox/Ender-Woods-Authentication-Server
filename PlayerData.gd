@@ -44,7 +44,7 @@ func db_create_account(username : String, password : String, salt : String):
 		db.query(insert_testing % [account_id, 27, 100000, 1])
 		db.query(insert_testing % [account_id, 28, 100000, 6])
 		
-	db_report_error(res)
+#	db_report_error(res)
 	return res
 
 func db_delete_account(session_token : int, username : String, password : String, salt : String):
@@ -56,20 +56,20 @@ func db_delete_account(session_token : int, username : String, password : String
 		res = db.query("""
 		DELETE FROM playeraccounts WHERE username = '%s'; 
 		DELETE FROM playerinventories WHERE account_id = '%d';""" % [username, acc_id])
-	db_report_error(res)
+#	db_report_error(res)
 	return res
 
 func db_add_auth_token(username : String, auth_token : String):
 	Logger.info("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
-	db_report_error(res)
+#	db_report_error(res)
 	return res
 
 func db_add_session_token(session_token : int, auth_token : String, world_server_id : int, test_case : bool):
 	#player_ID becomes session_token here
 	Logger.info("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
 	res = db.query("UPDATE playeraccounts SET session_token = '%d' WHERE auth_token = '%s';" % [session_token, auth_token])
-	db_report_error(res)
+#	db_report_error(res)
 	if res == OK and not test_case:
 		Logger.info("Session Token Addition Successful Sending Inventory Data to World server for Session Token{10}: %s \n" % [str(session_token).left(10)])
 		var inventory_data = db_get_inventory(session_token)
@@ -82,7 +82,7 @@ func db_add_session_token(session_token : int, auth_token : String, world_server
 
 func dbAddWorldServerID(session_token  : int, world_server_id : int):
 	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %d" %[world_server_id, session_token])
-	db_report_error(res)
+#	db_report_error(res)
 	return res
 	
 ########### Inventory ##############
@@ -118,7 +118,7 @@ func db_refresh_player_ids():
 	PlayerIDs = res
 
 func db_report_error(err):
-	if err != 0:
+	if err != OK:
 		Logger.error("Error: " +  str(err))
 		return
 
