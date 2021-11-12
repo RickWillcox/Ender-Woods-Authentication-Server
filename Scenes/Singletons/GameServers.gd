@@ -64,3 +64,10 @@ func send_all_item_data_to_world_servers(all_item_data : Dictionary):
 
 remote func update_inventory(session_token : int, inventory : Dictionary):
 	PlayerData.db_update_inventory(session_token, inventory)
+	
+remote func get_username(session_token : int):
+	var world_server_id = get_tree().get_rpc_sender_id()
+	PlayerData.db_get_username(session_token, world_server_id)
+
+func send_username(username : String, session_token : int, world_server_id : int):
+	rpc_id(world_server_id, "store_username", username, session_token)
