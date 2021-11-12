@@ -84,6 +84,9 @@ func dbAddWorldServerID(session_token  : int, world_server_id : int):
 	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %d" %[world_server_id, session_token])
 	db_report_error(res)
 	return res
+
+func db_get_username(session_token : int, world_server_id : int):
+	GameServers.send_username(db.query("Select username from playeraccounts where session_token = %d" % [session_token])[0]["username"], session_token, world_server_id)
 	
 ########### Inventory ##############
 
