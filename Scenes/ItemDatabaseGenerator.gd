@@ -168,17 +168,71 @@ func generate_item_database():
 	var items = []
 	# Equippable items
 	#                                ID                           		CATEGORY		BASE_MODIFIERS
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_HELMET,	Category.HEAD, {"defense":5}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_CHEST,	Category.CHEST, {"defense":10}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_GLOVES,	Category.HANDS, {"attack":4, "defense":2}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_LEGGINGS,	Category.LEGS, {"defense":8}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_BOOTS,	Category.FEET, {"attack":2, "defense":2}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_SWORD,	Category.MAIN_HAND, {"attack":10}))
-	items.append(Item.new_equippable(EquippableItemIds.SILVER_SHIELD,	Category.OFF_HAND, {"defense":10}))
-	items.append(Item.new_equippable(EquippableItemIds.GOLD_RING,		Category.RING, {"defense":4, "attack":4}))
-	items.append(Item.new_equippable(EquippableItemIds.DIAMOND_RING,	Category.RING, {"defense":6, "attack":6}))
-	items.append(Item.new_equippable(EquippableItemIds.GOLD_AMULET,		Category.AMULET, {"defense":5, "attack":5}))
-	items.append(Item.new_equippable(EquippableItemIds.GOLD_HELMET,		Category.AMULET, {"defense":5, "attack":5}))
+	# COPPER ITEMS
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_HELMET, Category.HEAD, {"defense":5}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_CHEST, Category.CHEST, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_GLOVES, Category.HANDS, {"attack":4, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_LEGGINGS, Category.LEGS, {"defense":8}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_BOOTS, Category.FEET, {"attack":2, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_SWORD, Category.MAIN_HAND, {"attack":10}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_SHIELD, Category.OFF_HAND, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_RING, Category.RING, {"defense":4, "attack":4}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_AMULET, Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_PICKAXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.COPPER_AXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	
+	# IRON ITEMS
+	items.append(Item.new_equippable(EquippableItemIds.IRON_HELMET, Category.HEAD, {"defense":5}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_CHEST, Category.CHEST, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_GLOVES, Category.HANDS, {"attack":4, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_LEGGINGS, Category.LEGS, {"defense":8}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_BOOTS, Category.FEET, {"attack":2, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_SWORD, Category.MAIN_HAND, {"attack":10}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_SHIELD, Category.OFF_HAND, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_RING, Category.RING, {"defense":4, "attack":4}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_AMULET, Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_PICKAXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.IRON_AXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	
+	# BRONZE ITEMS
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_HELMET, Category.HEAD, {"defense":5}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_CHEST, Category.CHEST, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_GLOVES, Category.HANDS, {"attack":4, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_LEGGINGS, Category.LEGS, {"defense":8}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_BOOTS, Category.FEET, {"attack":2, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_SWORD, Category.MAIN_HAND, {"attack":10}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_SHIELD, Category.OFF_HAND, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_RING, Category.RING, {"defense":4, "attack":4}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_AMULET, Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_PICKAXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.BRONZE_AXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	
+	# SILVER ITEMS
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_HELMET, Category.HEAD, {"defense":5}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_CHEST, Category.CHEST, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_GLOVES, Category.HANDS, {"attack":4, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_LEGGINGS, Category.LEGS, {"defense":8}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_BOOTS, Category.FEET, {"attack":2, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_SWORD, Category.MAIN_HAND, {"attack":10}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_SHIELD, Category.OFF_HAND, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_RING, Category.RING, {"defense":4, "attack":4}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_AMULET, Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_PICKAXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.SILVER_AXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	
+	# GOLD ITEMS
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_HELMET, Category.HEAD, {"defense":5}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_CHEST, Category.CHEST, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_GLOVES, Category.HANDS, {"attack":4, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_LEGGINGS, Category.LEGS, {"defense":8}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_BOOTS, Category.FEET, {"attack":2, "defense":2}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_SWORD, Category.MAIN_HAND, {"attack":10}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_SHIELD, Category.OFF_HAND, {"defense":10}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_RING, Category.RING, {"defense":4, "attack":4}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_AMULET, Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_PICKAXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_AXE, Category.MAIN_HAND, {"defense":5, "attack":5}))
+	
 	
 	# Materials
 	#                             ID                       stack_size
