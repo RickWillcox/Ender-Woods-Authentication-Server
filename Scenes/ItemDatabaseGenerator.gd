@@ -6,16 +6,66 @@ enum Category {NOT_EQUIPPABLE = 0, HEAD, CHEST, HANDS, LEGS, FEET, MAIN_HAND, OF
 
 # items start from id = 1
 const FIRST_EQUIPPABLE_ITEM_ID = 1
-enum EquippableItemIds { SILVER_HELMET = FIRST_EQUIPPABLE_ITEM_ID,
+enum EquippableItemIds { COPPER_HELMET = FIRST_EQUIPPABLE_ITEM_ID,
+						COPPER_CHEST,
+						COPPER_GLOVES,
+						COPPER_LEGGINGS,
+						COPPER_BOOTS,
+						COPPER_SWORD,
+						COPPER_SHIELD,
+						COPPER_RING,
+						COPPER_AMULET,
+						COPPER_PICKAXE,
+						COPPER_AXE,
+						
+						IRON_HELMET,
+						IRON_CHEST,
+						IRON_GLOVES,
+						IRON_LEGGINGS,
+						IRON_BOOTS,
+						IRON_SWORD,
+						IRON_SHIELD,
+						IRON_RING,
+						IRON_AMULET,
+						IRON_PICKAXE,
+						IRON_AXE,
+						
+						BRONZE_HELMET,
+						BRONZE_CHEST,
+						BRONZE_GLOVES,
+						BRONZE_LEGGINGS,
+						BRONZE_BOOTS,
+						BRONZE_SWORD,
+						BRONZE_SHIELD,
+						BRONZE_RING,
+						BRONZE_AMULET,
+						BRONZE_PICKAXE,
+						BRONZE_AXE,
+								
+						SILVER_HELMET,
 						SILVER_CHEST,
 						SILVER_GLOVES,
 						SILVER_LEGGINGS,
 						SILVER_BOOTS,
 						SILVER_SWORD,
 						SILVER_SHIELD,
+						SILVER_RING,
+						SILVER_AMULET,
+						SILVER_PICKAXE,
+						SILVER_AXE,
+						
+						GOLD_HELMET,
+						GOLD_CHEST,
+						GOLD_GLOVES,
+						GOLD_LEGGINGS,
+						GOLD_BOOTS,
+						GOLD_SWORD,
+						GOLD_SHIELD,
 						GOLD_RING,
-						DIAMOND_RING,
-						GOLD_AMULET}
+						GOLD_AMULET,
+						GOLD_PICKAXE,
+						GOLD_AXE
+						}
 
 # Leave 100000 free ids for equippable items. This is done so that when new items
 # are added we dont need to fix player inventory table
@@ -128,6 +178,7 @@ func generate_item_database():
 	items.append(Item.new_equippable(EquippableItemIds.GOLD_RING,		Category.RING, {"defense":4, "attack":4}))
 	items.append(Item.new_equippable(EquippableItemIds.DIAMOND_RING,	Category.RING, {"defense":6, "attack":6}))
 	items.append(Item.new_equippable(EquippableItemIds.GOLD_AMULET,		Category.AMULET, {"defense":5, "attack":5}))
+	items.append(Item.new_equippable(EquippableItemIds.GOLD_HELMET,		Category.AMULET, {"defense":5, "attack":5}))
 	
 	# Materials
 	#                             ID                       stack_size
