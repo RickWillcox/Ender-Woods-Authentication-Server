@@ -71,3 +71,8 @@ remote func get_username(session_token : int):
 
 func send_username(username : String, session_token : int, world_server_id : int):
 	rpc_id(world_server_id, "store_username", username, session_token)
+
+remote func get_recipe_database():
+	var recipe_db = PlayerData.db_get_recipe_database()
+	var world_server_id = get_tree().get_rpc_sender_id()
+	rpc_id(world_server_id, "receive_recipe_database", recipe_db)

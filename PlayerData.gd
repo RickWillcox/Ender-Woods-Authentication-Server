@@ -139,3 +139,22 @@ func db_update_inventory(session_token : int, new_inventory : Dictionary):
 			
 		db.query("INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );" \
 			% [account_id, slot, new_inventory[slot]["item_id"], amount])
+
+func db_get_recipe_database() -> Dictionary:
+	var res = db.query("SELECT * FROM recipes")
+	var recipe_db = {}
+	# Reconstruct the database as a dictionary with keys being recipe_ids
+	for row in res:
+		var materials_json = JSON.parse(row["materials"]).result
+		var recipe_id = row["recipe_id"]
+		row.erase("materials")
+		row.erase("recipe_id")
+		
+		# make the materials dictionary keys ints. In database the keys are strings
+		var materials = {}
+		for key in materials_json:
+			materials[int(key)] = materials_json[key]
+			
+		row["materials"] = materials
+		recipe_db[recipe_id] = row
+	return recipe_db
