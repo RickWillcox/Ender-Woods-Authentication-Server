@@ -25,17 +25,13 @@ func db_create_account(username : String, password : String, salt : String):
 		db.query(insert_query % [account_id, 11, 2])
 		db.query(insert_query % [account_id, 12, 3])
 		db.query(insert_query % [account_id, 13, 4])
-		db.query(insert_query % [account_id, 14, 5])
-		db.query(insert_query % [account_id, 15, 6])
-		db.query(insert_query % [account_id, 16, 7])
-		db.query(insert_query % [account_id, 17, 8])
-		db.query(insert_query % [account_id, 18, 9])
-		db.query(insert_query % [account_id, 19, 10])
-		
-		# some duplicates for testing
-		
-		db.query(insert_query % [account_id, 20, 2])
-		db.query(insert_query % [account_id, 21, 3])
+		db.query(insert_query % [account_id, 14, 61])
+		db.query(insert_query % [account_id, 16, 62])
+		db.query(insert_query % [account_id, 17, 63])
+		db.query(insert_query % [account_id, 18, 64])
+		db.query(insert_query % [account_id, 19, 65])
+		db.query(insert_query % [account_id, 20, 66])
+		db.query(insert_query % [account_id, 21, 67])
 		
 		var insert_testing : String = "INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );"
 		# add four stacks of copper ore for testing
@@ -43,6 +39,7 @@ func db_create_account(username : String, password : String, salt : String):
 		db.query(insert_testing % [account_id, 26, 100000, 15])
 		db.query(insert_testing % [account_id, 27, 100000, 1])
 		db.query(insert_testing % [account_id, 28, 100000, 6])
+		db.query(insert_testing % [account_id, 29, 100000, 20])
 		
 	db_report_error(res)
 	return res
