@@ -39,7 +39,7 @@ func db_create_account(username : String, password : String, salt : String):
 		db.query(insert_testing % [account_id, 26, 100000, 15])
 		db.query(insert_testing % [account_id, 27, 100000, 1])
 		db.query(insert_testing % [account_id, 28, 100000, 6])
-		db.query(insert_testing % [account_id, 29, 100000, 99])
+		db.query(insert_testing % [account_id, 29, 100000, 20])
 		
 	db_report_error(res)
 	return res
