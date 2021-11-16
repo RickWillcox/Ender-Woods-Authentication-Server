@@ -44,26 +44,27 @@ You will now be able to run the Authentication Server like normal (play), and th
 #### Linux
 
 1. Editor : `scons -j16 platform=x11 tools=yes target=release_debug bits=64 use_lto=yes`
-2. Export Template debug: `scons j16 platform=server tools=no target=release_debug bits=64 use_lto=yes`
-3. Export Template release: `scons j16 platform=server tools=no target=release bits=64 use_lto=yes`
+2. Export Template debug: `scons -j16 platform=server tools=no target=release_debug bits=64 use_lto=yes`
+3. Export Template release: `scons -j16 platform=server tools=no target=release bits=64 use_lto=yes`
 
 #### Windows
 
-1. Editor : `scons j16 platform=windows tools=yes target=release_debug bits=64 use_lto=yes`
-2. Export Template debug: `scons j16 platform=windows tools=no target=release_debug bits=64 use_lto=yes`
-3. Export Template release: `scons j16 platform=windows tools=no target=release bits=64 use_lto=yes`
+1. Editor : `scons -j16 platform=windows tools=yes target=release_debug bits=64 use_lto=yes`
+2. Export Template debug: `scons -j16 platform=windows tools=no target=release_debug bits=64 use_lto=yes`
+3. Export Template release: `scons -j16 platform=windows tools=no target=release bits=64 use_lto=yes`
 
 ### Android
 [Guide](https://docs.godotengine.org/en/latest/development/compiling/compiling_for_android.html)
 
 #### armv7
-1. `scons -j16 platform=android target=release android_arch=armv7`
-2. `scons -j16 platform=android target=release_debug android_arch=armv7`
+1. Export Template debug: `scons -j16 platform=android target=release_debug android_arch=armv7`
+2. Export Template release: `scons -j16 platform=android target=release android_arch=armv7`
 
 #### arm64v8
-1. `scons -j16 platform=android target=release android_arch=arm64v8`
-2. `scons -j16 platform=android target=release_debug android_arch=arm64v8`
+1. Export Template debug: `scons -j16 platform=android target=release_debug android_arch=arm64v8`
+2. Export Template release: `scons -j16 platform=android target=release android_arch=arm64v8`
 
 #### x86
-1. `scons -j16 platform=android target=release android_arch=x86`
-2. `scons -j16 platform=android target=release_debug android_arch=x86_64`
+1. Export Template debug: `scons -j16 platform=android target=release_debug android_arch=x86_64`
+2. Export Template release: `scons -j16 platform=android target=release android_arch=x86`
+
