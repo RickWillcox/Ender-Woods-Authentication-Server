@@ -6,6 +6,7 @@ var category = ItemDatabase.Category
 # items start from id = 1
 var equippable_item_ids = ItemDatabase.EquippableItemIds
 var material_item_ids = ItemDatabase.MaterialItemIds
+var recipe_ids = ItemDatabase.RecipeIds
 
 class Item:
 	var id : int
@@ -35,14 +36,6 @@ class Item:
 						[id, item_name, consumable, file_name, item_category, stack_size, base_modifiers]
 		var res = db.query(query_s)
 		assert(res == OK)
-		
-		
-enum RecipeType { SMELTING, BLACKSMITHING }
-enum RecipeId { SMELT_COPPER,
-				SMELT_BRONZE,
-				SMELT_IRON
-				SMELT_SILVER,
-				SMELT_GOLD }
 
 class Recipe:
 	var id : int
@@ -57,7 +50,7 @@ class Recipe:
 		materials = JSON.print(_materials)
 		result_item_id = _result_item_id
 	static func new_smelting(_id : int, _required_level : int, _materials : Dictionary, _result_item_id : int):
-		return Recipe.new(_id, RecipeType.SMELTING, _required_level, _materials, _result_item_id)
+		return Recipe.new(_id, ItemDatabase.RecipeType.SMELTING, _required_level, _materials, _result_item_id)
 	func save():
 		var db : MariaDB = DatabaseConnection.db
 		var query_s = "INSERT INTO recipes VALUES (%d, %d, %d, '%s', %d);" % \
@@ -182,11 +175,11 @@ func generate_recipe_database():
 	db_clear_recipes()
 	var recipes = []
 	
-	recipes.append(Recipe.new_smelting(RecipeId.SMELT_COPPER, 0, { material_item_ids.COPPER_ORE: 2 }, material_item_ids.COPPER_BAR))
-	recipes.append(Recipe.new_smelting(RecipeId.SMELT_BRONZE, 0, { material_item_ids.COPPER_ORE: 1, material_item_ids.TIN_ORE: 1 }, material_item_ids.BRONZE_BAR))
-	recipes.append(Recipe.new_smelting(RecipeId.SMELT_IRON, 0, { material_item_ids.IRON_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.IRON_BAR))
-	recipes.append(Recipe.new_smelting(RecipeId.SMELT_SILVER, 0, { material_item_ids.SILVER_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.SILVER_BAR))
-	recipes.append(Recipe.new_smelting(RecipeId.SMELT_GOLD, 0, { material_item_ids.GOLD_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.GOLD_BAR))
+	recipes.append(Recipe.new_smelting(recipe_ids.SMELT_COPPER, 0, { material_item_ids.COPPER_ORE: 2 }, material_item_ids.COPPER_BAR))
+	recipes.append(Recipe.new_smelting(recipe_ids.SMELT_BRONZE, 0, { material_item_ids.COPPER_ORE: 1, material_item_ids.TIN_ORE: 1 }, material_item_ids.BRONZE_BAR))
+	recipes.append(Recipe.new_smelting(recipe_ids.SMELT_IRON, 0, { material_item_ids.IRON_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.IRON_BAR))
+	recipes.append(Recipe.new_smelting(recipe_ids.SMELT_SILVER, 0, { material_item_ids.SILVER_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.SILVER_BAR))
+	recipes.append(Recipe.new_smelting(recipe_ids.SMELT_GOLD, 0, { material_item_ids.GOLD_ORE: 2, material_item_ids.COAL : 1 }, material_item_ids.GOLD_BAR))
 	
 	for recipe in recipes:
 		(recipe as Recipe).save()
