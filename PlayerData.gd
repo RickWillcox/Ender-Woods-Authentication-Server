@@ -3,10 +3,6 @@ extends Node
 var PlayerIDs : Array
 
 #### Maria DB
-var res 
-var res1
-var res2
-var res3
 var db : MariaDB
 
 func _ready():
@@ -16,7 +12,7 @@ func _ready():
 
 func db_create_account(username : String, password : String, salt : String):
 	Logger.info("Attempting to create account: username : String: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
-	res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
+	var res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
 	if res == OK:
 		var account_id : int = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
 		# add all basic items into players backpack
@@ -44,10 +40,11 @@ func db_create_account(username : String, password : String, salt : String):
 	db_report_error(res)
 	return res
 
-func db_delete_account(session_token : int, username : String, password : String, salt : String):
-	Logger.info("Deleting account: Username: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
-	var user_data = db_return_account_data(session_token)
-	if user_data[0]["username"] == username and user_data[0]["password"] == password and user_data[0]["salt"] == salt:
+func db_delete_account(username : String, password : String):
+	var res
+	Logger.info("Deleting account: Username: %s | Password{5}: %s" % [username, password.left(5)])
+	var user_data = db.query("SELECT * FROM playeraccounts where username = '%s'" % [username])
+	if user_data[0]["username"] == username and user_data[0]["password"] == password:
 		var acc_id = user_data[0]["account_id"]
 		#Delete Account and Inventory
 		res = db.query("""
@@ -57,6 +54,7 @@ func db_delete_account(session_token : int, username : String, password : String
 	return res
 
 func db_add_auth_token(username : String, auth_token : String):
+	var res
 	Logger.info("Adding Auth token: Username: %s | Auth Token{10}: %s \n" % [username, str(auth_token).left(10)])
 	res = db.query("UPDATE playeraccounts SET auth_token = '%s' WHERE username = '%s';" % [auth_token, username])
 	db_report_error(res)
@@ -64,6 +62,7 @@ func db_add_auth_token(username : String, auth_token : String):
 
 func db_add_session_token(session_token : int, auth_token : String, world_server_id : int, test_case : bool):
 	#player_ID becomes session_token here
+	var res
 	Logger.info("Adding Session token: Session Token{10}: %s | Auth Token{5}: %s \n" % [str(session_token).left(10), str(auth_token).left(5)])
 	res = db.query("UPDATE playeraccounts SET session_token = '%d' WHERE auth_token = '%s';" % [session_token, auth_token])
 	db_report_error(res)
@@ -78,6 +77,7 @@ func db_add_session_token(session_token : int, auth_token : String, world_server
 	return res
 
 func dbAddWorldServerID(session_token  : int, world_server_id : int):
+	var res
 	res = db.query("UPDATE playeraccounts SET world_server_id = %s WHERE session_token = %d" %[world_server_id, session_token])
 	db_report_error(res)
 	return res
@@ -88,6 +88,7 @@ func db_get_username(session_token : int, world_server_id : int):
 ########### Inventory ##############
 
 func db_get_inventory(session_token : int):
+	var res
 	var acc_id : int = db_return_account_data(session_token)[0]["account_id"]
 	# Rearrange inventory as a dictionary
 	var inventory : Dictionary = {}
@@ -106,14 +107,17 @@ func db_return_account_data(session_token : int):
 	return db.query("SELECT * FROM playeraccounts WHERE session_token = '%d'" % [session_token])
 	
 func db_check_unique_username(username : String):
+	db_refresh_player_ids()
 	var res : Array = [false, null, null, null, null]
-	for id in PlayerIDs:
-		if id["username"] == username:
-			res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
-			break
+	if PlayerIDs != []:
+		for id in PlayerIDs:
+			if id["username"] == username:
+				res = [true, id["username"], id["password"], id["salt"], id["can_login"]]
+				break
 	return res
 
 func db_refresh_player_ids():
+	var res
 	res = db.query("SELECT * FROM playeraccounts;")
 	PlayerIDs = res
 

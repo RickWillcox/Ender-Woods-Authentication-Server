@@ -63,6 +63,12 @@ enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/g
 [global]
 
 plug=false
+max=false
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=30000
+limits/debugger_stdout/max_messages_per_frame=50
 
 [physics]
 
