@@ -13,29 +13,30 @@ func _ready():
 func db_create_account(username : String, password : String, salt : String):
 	Logger.info("Attempting to create account: username : String: %s | Password{5}: %s, | Salt{5}: %s" % [username, password.left(5), salt.left(5)])
 	var res = db.query("INSERT INTO playeraccounts (username, password, salt) VALUES ('%s', '%s', '%s');" % [username, password, salt])
-	if res == OK:
-		var account_id : int = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
-		# add all basic items into players backpack
-		var insert_query : String = "INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );"
-		db.query(insert_query % [account_id, 10, 1])
-		db.query(insert_query % [account_id, 11, 2])
-		db.query(insert_query % [account_id, 12, 3])
-		db.query(insert_query % [account_id, 13, 4])
-		db.query(insert_query % [account_id, 14, 61])
-		db.query(insert_query % [account_id, 16, 62])
-		db.query(insert_query % [account_id, 17, 63])
-		db.query(insert_query % [account_id, 18, 64])
-		db.query(insert_query % [account_id, 19, 65])
-		db.query(insert_query % [account_id, 20, 66])
-		db.query(insert_query % [account_id, 21, 67])
-		
-		var insert_testing : String = "INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );"
-		# add four stacks of copper ore for testing
-		db.query(insert_testing % [account_id, 25, 100000, 15])
-		db.query(insert_testing % [account_id, 26, 100000, 15])
-		db.query(insert_testing % [account_id, 27, 100000, 1])
-		db.query(insert_testing % [account_id, 28, 100000, 6])
-		db.query(insert_testing % [account_id, 29, 100000, 20])
+	yield(get_tree().create_timer(1),"timeout")
+	var account_id : int = db.query("SELECT account_id FROM playeraccounts WHERE username='%s' LIMIT 1" % [username])[0].account_id
+	yield(get_tree().create_timer(1),"timeout")
+	# add all basic items into players backpack
+	var insert_query : String = "INSERT INTO playerinventories (account_id, item_slot, item_id) VALUES (%s, %d, %d );"
+	db.query(insert_query % [account_id, 10, 1])
+	db.query(insert_query % [account_id, 11, 2])
+	db.query(insert_query % [account_id, 12, 3])
+	db.query(insert_query % [account_id, 13, 4])
+	db.query(insert_query % [account_id, 14, 61])
+	db.query(insert_query % [account_id, 16, 62])
+	db.query(insert_query % [account_id, 17, 63])
+	db.query(insert_query % [account_id, 18, 64])
+	db.query(insert_query % [account_id, 19, 65])
+	db.query(insert_query % [account_id, 20, 66])
+	db.query(insert_query % [account_id, 21, 67])
+	
+	var insert_testing : String = "INSERT INTO playerinventories (account_id, item_slot, item_id, amount) VALUES (%s, %d, %d, %d );"
+	# add four stacks of copper ore for testing
+	db.query(insert_testing % [account_id, 25, 100000, 15])
+	db.query(insert_testing % [account_id, 26, 100000, 15])
+	db.query(insert_testing % [account_id, 27, 100000, 1])
+	db.query(insert_testing % [account_id, 28, 100000, 6])
+	db.query(insert_testing % [account_id, 29, 100000, 20])
 		
 	db_report_error(res)
 	return res
@@ -47,9 +48,8 @@ func db_delete_account(username : String, password : String):
 	if user_data[0]["username"] == username and user_data[0]["password"] == password:
 		var acc_id = user_data[0]["account_id"]
 		#Delete Account and Inventory
-		res = db.query("""
-		DELETE FROM playeraccounts WHERE username = '%s'; 
-		DELETE FROM playerinventories WHERE account_id = '%d';""" % [username, acc_id])
+		res = db.query("DELETE FROM playeraccounts WHERE account_id = '%d';" % [acc_id])
+		db.query("DELETE FROM playerinventories WHERE account_id = '%d';" % [acc_id])
 	db_report_error(res)
 	return res
 

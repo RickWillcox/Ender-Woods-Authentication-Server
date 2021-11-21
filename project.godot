@@ -64,6 +64,7 @@ enabled=PoolStringArray( "res://addons/godot-sqlite/plugin.cfg", "res://addons/g
 
 plug=false
 max=false
+console=false
 
 [network]
 

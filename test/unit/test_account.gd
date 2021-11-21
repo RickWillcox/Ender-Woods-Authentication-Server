@@ -35,7 +35,7 @@ func test_Account():
 	subtest_get_playerinventories_columns()
 	subtest_get_playeraccounts_columns()
 	subtest_update_inventory()
-#	subtest_DeleteAccount()
+	subtest_DeleteAccount()
 
 ########### Account Tests ##############
 func subtest_create_account():
@@ -64,7 +64,7 @@ func subtest_DeleteAccount():
 	res = PlayerData.db_delete_account(test_username, test_password)
 	assert_eq(0, res, "Delete Account")
 	var username_in_db = PlayerData.db.query(("SELECT username FROM playeraccounts where username = '%s'") % [test_username])
-	assert_eq(0, username_in_db, "Check Account was deleted")
+	assert_eq([], username_in_db, "Check Account was deleted")
 
 # Item database functions
 	
