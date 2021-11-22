@@ -51,17 +51,6 @@ remote func ReceivePlayerTokenForDatabase(player_id : int, token : String):
 func send_updated_inventory_to_client(inventory_data : Dictionary, world_server_id : int, session_token : int):
 	rpc_id(world_server_id, "receive_player_inventory", inventory_data, session_token)
 
-remote func GetAllItemsFromDatabase():
-	var res : Array = PlayerData.db_get_all_items_database()
-	# Rearrange item data as a dictionary so that Client and WorldServer can easily get item data using item_id
-	var item_db : Dictionary = {}
-	for row in res:
-		item_db[row.item_id] = row
-	send_all_item_data_to_world_servers(item_db)
-
-func send_all_item_data_to_world_servers(all_item_data : Dictionary):
-	rpc_id(0, "ReceiveItemData", all_item_data)	
-
 remote func update_inventory(session_token : int, inventory : Dictionary):
 	PlayerData.db_update_inventory(session_token, inventory)
 	
@@ -71,8 +60,3 @@ remote func get_username(session_token : int):
 
 func send_username(username : String, session_token : int, world_server_id : int):
 	rpc_id(world_server_id, "store_username", username, session_token)
-
-remote func get_recipe_database():
-	var recipe_db = PlayerData.db_get_recipe_database()
-	var world_server_id = get_tree().get_rpc_sender_id()
-	rpc_id(world_server_id, "receive_recipe_database", recipe_db)
