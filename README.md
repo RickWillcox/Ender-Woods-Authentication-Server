@@ -1,3 +1,5 @@
+**Not longer in active development, replaced by Nakama Server**
+
 # Ender Woods Authentication Server
 
 ## Installation Guide
